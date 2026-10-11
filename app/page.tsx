@@ -10,6 +10,7 @@ import MCPCard from "@/components/MCPCard";
 import SkillCard from "@/components/SkillCard";
 import LaunchpadPanel from "@/components/LaunchpadPanel";
 import SearchBar from "@/components/SearchBar";
+import Footer from "@/components/Footer";
 import toast from "react-hot-toast";
 import { Brain, Server, Sparkles, Filter } from "lucide-react";
 
@@ -259,9 +260,10 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <div className="flex-1">
               <SearchBar
+                id="search-models"
                 value={modelSearch}
                 onChange={setModelSearch}
-                placeholder="Search models, providers, tags..."
+                placeholder="Search 50+ models, providers, tags..."
               />
             </div>
             <div className="flex items-center gap-2">
@@ -311,6 +313,7 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <div className="flex-1">
               <SearchBar
+                id="search-mcp"
                 value={mcpSearch}
                 onChange={setMcpSearch}
                 placeholder="Search MCP servers, categories..."
@@ -363,6 +366,7 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <div className="flex-1">
               <SearchBar
+                id="search-skills"
                 value={skillSearch}
                 onChange={setSkillSearch}
                 placeholder="Search skills, categories..."
@@ -400,15 +404,10 @@ export default function HomePage() {
           )}
         </section>
 
-        {/* ── Footer ───────────────────────────────────────── */}
-        <footer className="divider pt-8 pb-4 text-center">
-          <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
-            Built with ❤️ by{" "}
-            <span className="font-semibold text-gradient-blue">VibeLaunch</span> ·
-            Open to the public · No auth required
-          </p>
-        </footer>
       </main>
+
+      {/* ── Footer ───────────────────────────────────────── */}
+      <Footer />
 
       {/* Launchpad Panel */}
       {launchpadOpen && (
