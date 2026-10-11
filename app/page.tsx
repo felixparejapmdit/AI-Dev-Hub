@@ -11,7 +11,183 @@ import SkillCard from "@/components/SkillCard";
 import ResourceDetailModal from "@/components/ResourceDetailModal";
 import SearchBar from "@/components/SearchBar";
 import Footer from "@/components/Footer";
-import { Brain, Server, Sparkles, Filter, Layers } from "lucide-react";
+import {
+  Brain,
+  Server,
+  Sparkles,
+  Filter,
+  Layers,
+  Terminal,
+  Cpu,
+  FolderOpen,
+  Database,
+  Globe,
+  MessageSquare,
+  Code2,
+  Cloud,
+  Search,
+  LineChart,
+  BookOpen,
+} from "lucide-react";
+
+// ─── Provider Meta Information ───────────────────────────────────────────────
+const PROVIDER_METADATA: Record<
+  string,
+  { label: string; color: string; desc: string }
+> = {
+  Anthropic: {
+    label: "Anthropic · Claude Family",
+    color: "#f97316",
+    desc: "Frontier hybrid chain-of-thought thinking and agentic Computer Use.",
+  },
+  Google: {
+    label: "Google · Gemini Family",
+    color: "#4285f4",
+    desc: "2M-token multimodal architecture with native audio, video, and codebase indexing.",
+  },
+  "Nous Research": {
+    label: "Nous Research · Hermes Family",
+    color: "#8b5cf6",
+    desc: "Premier open-weights steerable intelligence & function-calling agent models.",
+  },
+  OpenCode: {
+    label: "OpenCode · Autonomous Runtime Family",
+    color: "#10b981",
+    desc: "Self-executing developer runtime models connected to terminal and project files.",
+  },
+  DeepSeek: {
+    label: "DeepSeek · Reasoning & Code Family",
+    color: "#06b6d4",
+    desc: "Open-weights reinforcement reasoning models with MIT license.",
+  },
+  OpenAI: {
+    label: "OpenAI · Reasoning & Flagship Family",
+    color: "#10a37f",
+    desc: "o-series chain-of-thought and multimodal flagship API models.",
+  },
+  Meta: {
+    label: "Meta · Llama Family",
+    color: "#1877f2",
+    desc: "Open frontier weights running locally on consumer and enterprise GPUs.",
+  },
+  "Mistral AI": {
+    label: "Mistral AI · European Frontier Family",
+    color: "#ff7000",
+    desc: "Ultra-fast open and commercial models optimized for coding and multilingual tasks.",
+  },
+  Qwen: {
+    label: "Alibaba · Qwen Family",
+    color: "#a855f7",
+    desc: "Premier open-source coding, math, and general intelligence models.",
+  },
+  xAI: {
+    label: "xAI · Grok Family",
+    color: "#ec4899",
+    desc: "Frontier reasoning models with real-time knowledge synthesis.",
+  },
+  Cohere: {
+    label: "Cohere · Enterprise RAG Family",
+    color: "#14b8a6",
+    desc: "Production retrieval-augmented generation and multilingual search embeddings.",
+  },
+  Perplexity: {
+    label: "Perplexity · Live Search Reasoners",
+    color: "#6366f1",
+    desc: "Live citation grounding and chain-of-thought web verification.",
+  },
+};
+
+// ─── MCP Category Metadata ───────────────────────────────────────────────────
+const MCP_CATEGORY_METADATA: Record<
+  string,
+  { label: string; color: string; desc: string; icon: React.ComponentType<{ size?: number; style?: React.CSSProperties }> }
+> = {
+  DEVTOOLS: {
+    label: "Developer Runtimes & Version Control",
+    color: "#10b981",
+    desc: "Interactive shells, Docker management, Git history, and issue tracking.",
+    icon: Terminal,
+  },
+  AI: {
+    label: "AI & Model Orchestration Engines",
+    color: "#8b5cf6",
+    desc: "Function calling dispatchers, local Ollama bridges, and persistent memory.",
+    icon: Cpu,
+  },
+  FILESYSTEM: {
+    label: "Local Filesystem & Scoped Access",
+    color: "#f59e0b",
+    desc: "Safe scoped file reading, writing, and directory tree exploration.",
+    icon: FolderOpen,
+  },
+  DATABASE: {
+    label: "Databases & Data Analytics",
+    color: "#3b82f6",
+    desc: "Direct SQL queries, PostgreSQL, SQLite, and Google BigQuery data lakes.",
+    icon: Database,
+  },
+  WEB: {
+    label: "Web Browsing, Scraping & Search",
+    color: "#a855f7",
+    desc: "Live web indexing, Puppeteer headless automation, and markdown extraction.",
+    icon: Globe,
+  },
+  COMMUNICATION: {
+    label: "Workspace & Team Communication",
+    color: "#3b82f6",
+    desc: "Google Docs, Google Sheets, Gmail drafts, and Slack workspace chatops.",
+    icon: MessageSquare,
+  },
+  CODE: {
+    label: "Code Intelligence & Language Servers",
+    color: "#10b981",
+    desc: "AST type resolution, symbol definitions, and Python Jupyter execution.",
+    icon: Code2,
+  },
+};
+
+// ─── Skill Category Metadata ─────────────────────────────────────────────────
+const SKILL_CATEGORY_METADATA: Record<
+  string,
+  { label: string; color: string; desc: string; icon: React.ComponentType<{ size?: number; style?: React.CSSProperties }> }
+> = {
+  CODING: {
+    label: "Autonomous Engineering, TDD & Architecture",
+    color: "#10b981",
+    desc: "Test-Driven Development, extended thinking budgeting, bug hunting, and fullstack design.",
+    icon: Code2,
+  },
+  DEVOPS: {
+    label: "Agent Computer Use & System Operations",
+    color: "#f59e0b",
+    desc: "Claude Computer Use GUI navigation, cloud Docker containers, and CI/CD pipelines.",
+    icon: Cloud,
+  },
+  RESEARCH: {
+    label: "Long-Context Ingestion & Deep Research",
+    color: "#3b82f6",
+    desc: "Gemini 2M-token monorepo analysis, video timestamp synthesis, and academic literature review.",
+    icon: Search,
+  },
+  ANALYSIS: {
+    label: "Database Schema & Pipeline Optimization",
+    color: "#8b5cf6",
+    desc: "SQL execution plan tuning, index optimization, and data normalization.",
+    icon: LineChart,
+  },
+  WRITING: {
+    label: "Technical Documentation & Specifications",
+    color: "#3b82f6",
+    desc: "Diátaxis framework developer documentation, OpenAPI specs, and interactive guides.",
+    icon: BookOpen,
+  },
+  GENERAL: {
+    label: "Specialized General Directives",
+    color: "#ec4899",
+    desc: "Universal guidelines and multi-step reasoning frameworks.",
+    icon: Sparkles,
+  },
+};
 
 // ─── Section Header ───────────────────────────────────────────────────────────
 function SectionHeader({
@@ -110,6 +286,7 @@ export default function HomePage() {
 
   // Type & category filters
   const [modelTypeFilter, setModelTypeFilter] = useState("");
+  const [modelFamilyFilter, setModelFamilyFilter] = useState("");
   const [mcpCategoryFilter, setMcpCategoryFilter] = useState("");
   const [skillCategoryFilter, setSkillCategoryFilter] = useState("");
 
@@ -134,7 +311,7 @@ export default function HomePage() {
     setSelectedType(null);
   };
 
-  // ── Filtered lists ──
+  // ── Filtered Models ──
   const filteredModels = useMemo(() => {
     return MOCK_MODELS.filter((m) => {
       const q = modelSearch.toLowerCase();
@@ -144,6 +321,7 @@ export default function HomePage() {
         m.provider.toLowerCase().includes(q) ||
         m.tags.some((t) => t.toLowerCase().includes(q));
       const matchesType = !modelTypeFilter || m.type === modelTypeFilter;
+      const matchesFamily = !modelFamilyFilter || m.provider === modelFamilyFilter;
 
       let matchesEco = true;
       if (ecosystemFilter) {
@@ -155,10 +333,30 @@ export default function HomePage() {
           (m.compatibleLLMs?.some((c) => c.toLowerCase().includes(ecoLower)) ?? false);
       }
 
-      return matchesSearch && matchesType && matchesEco;
+      return matchesSearch && matchesType && matchesFamily && matchesEco;
     });
-  }, [modelSearch, modelTypeFilter, ecosystemFilter]);
+  }, [modelSearch, modelTypeFilter, modelFamilyFilter, ecosystemFilter]);
 
+  // ── Grouped Models by Family ──
+  const groupedModels = useMemo(() => {
+    const map = new Map<string, AIModel[]>();
+    filteredModels.forEach((m) => {
+      const list = map.get(m.provider) || [];
+      list.push(m);
+      map.set(m.provider, list);
+    });
+
+    return Array.from(map.entries()).map(([provider, items]) => {
+      const meta = PROVIDER_METADATA[provider] || {
+        label: `${provider} Family`,
+        color: "#6366f1",
+        desc: "Frontier model architectures and specialized runtimes.",
+      };
+      return { provider, meta, items };
+    });
+  }, [filteredModels]);
+
+  // ── Filtered MCP ──
   const filteredMCP = useMemo(() => {
     return MOCK_MCP_SERVERS.filter((s) => {
       const q = mcpSearch.toLowerCase();
@@ -182,6 +380,27 @@ export default function HomePage() {
     });
   }, [mcpSearch, mcpCategoryFilter, ecosystemFilter]);
 
+  // ── Grouped MCP by Category ──
+  const groupedMCP = useMemo(() => {
+    const map = new Map<string, MCPServer[]>();
+    filteredMCP.forEach((server) => {
+      const list = map.get(server.category) || [];
+      list.push(server);
+      map.set(server.category, list);
+    });
+
+    return Array.from(map.entries()).map(([category, items]) => {
+      const meta = MCP_CATEGORY_METADATA[category] || {
+        label: `${category} Tools`,
+        color: "#10b981",
+        desc: "Specialized Model Context Protocol integrations.",
+        icon: Terminal,
+      };
+      return { category, meta, items };
+    });
+  }, [filteredMCP]);
+
+  // ── Filtered Skills ──
   const filteredSkills = useMemo(() => {
     return MOCK_SKILLS.filter((s) => {
       const q = skillSearch.toLowerCase();
@@ -205,6 +424,26 @@ export default function HomePage() {
     });
   }, [skillSearch, skillCategoryFilter, ecosystemFilter]);
 
+  // ── Grouped Skills by Category ──
+  const groupedSkills = useMemo(() => {
+    const map = new Map<string, Skill[]>();
+    filteredSkills.forEach((skill) => {
+      const list = map.get(skill.category) || [];
+      list.push(skill);
+      map.set(skill.category, list);
+    });
+
+    return Array.from(map.entries()).map(([category, items]) => {
+      const meta = SKILL_CATEGORY_METADATA[category] || {
+        label: `${category} Prompts`,
+        color: "#8b5cf6",
+        desc: "Expert-engineered agent prompts.",
+        icon: Sparkles,
+      };
+      return { category, meta, items };
+    });
+  }, [filteredSkills]);
+
   const ecosystems = [
     { label: "All Ecosystems", value: "" },
     { label: "Claude (Anthropic)", value: "Claude" },
@@ -213,6 +452,18 @@ export default function HomePage() {
     { label: "OpenCode", value: "OpenCode" },
     { label: "DeepSeek", value: "DeepSeek" },
     { label: "OpenAI", value: "OpenAI" },
+  ];
+
+  const modelFamilies = [
+    "Anthropic",
+    "Google",
+    "Nous Research",
+    "OpenCode",
+    "DeepSeek",
+    "OpenAI",
+    "Meta",
+    "Mistral AI",
+    "Qwen",
   ];
 
   return (
@@ -248,7 +499,7 @@ export default function HomePage() {
                 </span>
               </h3>
               <p className="text-xs text-neutral-400">
-                Instantly shows models, MCP tools, and skills compatible with your preferred AI environment.
+                Instantly shows models, MCP tools, and skills categorized for your chosen AI stack.
               </p>
             </div>
           </div>
@@ -281,40 +532,108 @@ export default function HomePage() {
             id="models"
             icon={Brain}
             title="Frontier AI Models"
-            description="Continuously updated LLMs for cloud APIs, local Ollama, and agent runtimes. Click any card to inspect release updates, YouTube guides, and GitHub repos."
+            description="Categorized by frontier AI family. Every card is visible below with release updates, YouTube guides, and GitHub repos."
             count={filteredModels.length}
             accentColor="var(--color-blue)"
           />
 
-          {/* Filters */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-6">
-            <div className="flex-1">
-              <SearchBar
-                id="search-models"
-                value={modelSearch}
-                onChange={setModelSearch}
-                placeholder="Search models, providers (Claude, Gemini, Hermes, OpenCode...)"
-              />
+          {/* Filters & Family Selectors */}
+          <div className="space-y-4 mb-8">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex-1">
+                <SearchBar
+                  id="search-models"
+                  value={modelSearch}
+                  onChange={setModelSearch}
+                  placeholder="Search models, providers (Claude, Gemini, Hermes, OpenCode...)"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <Filter size={14} style={{ color: "var(--color-text-muted)" }} />
+                <FilterPills
+                  options={["CLOUD", "LOCAL", "HYBRID"]}
+                  selected={modelTypeFilter}
+                  onChange={setModelTypeFilter}
+                />
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Filter size={14} style={{ color: "var(--color-text-muted)" }} />
-              <FilterPills
-                options={["CLOUD", "LOCAL", "HYBRID"]}
-                selected={modelTypeFilter}
-                onChange={setModelTypeFilter}
-              />
+
+            {/* Quick Family Jump Tabs */}
+            <div className="flex items-center gap-2 flex-wrap text-xs">
+              <span className="text-[11px] font-mono text-neutral-400">Model Family:</span>
+              <button
+                onClick={() => setModelFamilyFilter("")}
+                className="px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer"
+                style={{
+                  background: modelFamilyFilter === "" ? "rgba(59, 130, 246, 0.2)" : "rgba(255, 255, 255, 0.04)",
+                  border: `1px solid ${modelFamilyFilter === "" ? "rgba(59, 130, 246, 0.4)" : "rgba(255, 255, 255, 0.08)"}`,
+                  color: modelFamilyFilter === "" ? "#60a5fa" : "var(--color-text-muted)",
+                }}
+              >
+                All Families
+              </button>
+              {modelFamilies.map((fam) => {
+                const count = MOCK_MODELS.filter((m) => m.provider === fam).length;
+                const active = modelFamilyFilter === fam;
+                return (
+                  <button
+                    key={fam}
+                    onClick={() => setModelFamilyFilter(active ? "" : fam)}
+                    className="px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
+                    style={{
+                      background: active ? "rgba(59, 130, 246, 0.2)" : "rgba(255, 255, 255, 0.04)",
+                      border: `1px solid ${active ? "rgba(59, 130, 246, 0.4)" : "rgba(255, 255, 255, 0.08)"}`,
+                      color: active ? "#60a5fa" : "var(--color-text-secondary)",
+                    }}
+                  >
+                    <span>{fam}</span>
+                    <span className="opacity-60 text-[10px] font-mono">({count})</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          {/* Grid */}
-          {filteredModels.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
-              {filteredModels.map((model) => (
-                <ModelCard
-                  key={model.id}
-                  model={model}
-                  onSelect={handleOpenModel}
-                />
+          {/* Categorized Model Groups */}
+          {groupedModels.length > 0 ? (
+            <div className="space-y-12">
+              {groupedModels.map(({ provider, meta, items }) => (
+                <div key={provider} className="relative">
+                  {/* Category Header */}
+                  <div className="flex items-center gap-3 pb-3 mb-4 border-b" style={{ borderColor: "rgba(255, 255, 255, 0.08)" }}>
+                    <div
+                      className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm"
+                      style={{ background: `${meta.color}20`, border: `1px solid ${meta.color}40` }}
+                    >
+                      <Brain size={16} style={{ color: meta.color }} />
+                    </div>
+                    <div>
+                      <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                        <span>{meta.label}</span>
+                        <span
+                          className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full"
+                          style={{ background: `${meta.color}15`, color: meta.color }}
+                        >
+                          {items.length} {items.length === 1 ? "model" : "models"}
+                        </span>
+                      </h3>
+                      <p className="text-xs text-neutral-400 mt-0.5">
+                        {meta.desc}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Cards Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
+                    {items.map((model) => (
+                      <ModelCard
+                        key={model.id}
+                        model={model}
+                        onSelect={handleOpenModel}
+                      />
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           ) : (
@@ -333,13 +652,13 @@ export default function HomePage() {
             id="mcp"
             icon={Server}
             title="Model Context Protocol (MCP) Tools"
-            description="Community & official MCP servers granting models direct filesystem, database, and terminal capabilities. Click to view install command and docs."
+            description="Categorized by capability (Execution, AI Engines, Cloud DBs, Web). Every MCP tool is displayed with ready-to-use configs."
             count={filteredMCP.length}
             accentColor="var(--color-emerald)"
           />
 
           {/* Filters */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row gap-4 mb-8">
             <div className="flex-1">
               <SearchBar
                 id="search-mcp"
@@ -351,23 +670,57 @@ export default function HomePage() {
             <div className="flex items-center gap-2 flex-wrap">
               <Filter size={14} style={{ color: "var(--color-text-muted)" }} />
               <FilterPills
-                options={["DATABASE", "FILESYSTEM", "WEB", "DEVTOOLS", "COMMUNICATION"]}
+                options={["DEVTOOLS", "AI", "FILESYSTEM", "DATABASE", "WEB", "COMMUNICATION"]}
                 selected={mcpCategoryFilter}
                 onChange={setMcpCategoryFilter}
               />
             </div>
           </div>
 
-          {/* Grid */}
-          {filteredMCP.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
-              {filteredMCP.map((server) => (
-                <MCPCard
-                  key={server.id}
-                  server={server}
-                  onSelect={handleOpenMCP}
-                />
-              ))}
+          {/* Categorized MCP Groups */}
+          {groupedMCP.length > 0 ? (
+            <div className="space-y-12">
+              {groupedMCP.map(({ category, meta, items }) => {
+                const Icon = meta.icon;
+                return (
+                  <div key={category} className="relative">
+                    {/* Category Header */}
+                    <div className="flex items-center gap-3 pb-3 mb-4 border-b" style={{ borderColor: "rgba(255, 255, 255, 0.08)" }}>
+                      <div
+                        className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm"
+                        style={{ background: `${meta.color}20`, border: `1px solid ${meta.color}40` }}
+                      >
+                        <Icon size={16} style={{ color: meta.color }} />
+                      </div>
+                      <div>
+                        <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                          <span>{meta.label}</span>
+                          <span
+                            className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full"
+                            style={{ background: `${meta.color}15`, color: meta.color }}
+                          >
+                            {items.length} {items.length === 1 ? "tool" : "tools"}
+                          </span>
+                        </h3>
+                        <p className="text-xs text-neutral-400 mt-0.5">
+                          {meta.desc}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Cards Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
+                      {items.map((server) => (
+                        <MCPCard
+                          key={server.id}
+                          server={server}
+                          onSelect={handleOpenMCP}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           ) : (
             <div
@@ -385,13 +738,13 @@ export default function HomePage() {
             id="skills"
             icon={Sparkles}
             title="Specialized Agent Skills & Prompts"
-            description="Expert-tuned system directives for Claude Computer Use, Gemini Multimodal, Hermes Tool Calling, and OpenCode Autonomous Engineering."
+            description="Categorized by discipline (Engineering & TDD, Reasoning & Architecture, GUI Computer Use). All prompts visible below."
             count={filteredSkills.length}
             accentColor="var(--color-violet)"
           />
 
           {/* Filters */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row gap-4 mb-8">
             <div className="flex-1">
               <SearchBar
                 id="search-skills"
@@ -403,23 +756,57 @@ export default function HomePage() {
             <div className="flex items-center gap-2 flex-wrap">
               <Filter size={14} style={{ color: "var(--color-text-muted)" }} />
               <FilterPills
-                options={["CODING", "WRITING", "ANALYSIS", "DEVOPS", "RESEARCH"]}
+                options={["CODING", "DEVOPS", "RESEARCH", "ANALYSIS", "WRITING"]}
                 selected={skillCategoryFilter}
                 onChange={setSkillCategoryFilter}
               />
             </div>
           </div>
 
-          {/* Grid */}
-          {filteredSkills.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
-              {filteredSkills.map((skill) => (
-                <SkillCard
-                  key={skill.id}
-                  skill={skill}
-                  onSelect={handleOpenSkill}
-                />
-              ))}
+          {/* Categorized Skill Groups */}
+          {groupedSkills.length > 0 ? (
+            <div className="space-y-12">
+              {groupedSkills.map(({ category, meta, items }) => {
+                const Icon = meta.icon;
+                return (
+                  <div key={category} className="relative">
+                    {/* Category Header */}
+                    <div className="flex items-center gap-3 pb-3 mb-4 border-b" style={{ borderColor: "rgba(255, 255, 255, 0.08)" }}>
+                      <div
+                        className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm"
+                        style={{ background: `${meta.color}20`, border: `1px solid ${meta.color}40` }}
+                      >
+                        <Icon size={16} style={{ color: meta.color }} />
+                      </div>
+                      <div>
+                        <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                          <span>{meta.label}</span>
+                          <span
+                            className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full"
+                            style={{ background: `${meta.color}15`, color: meta.color }}
+                          >
+                            {items.length} {items.length === 1 ? "prompt" : "prompts"}
+                          </span>
+                        </h3>
+                        <p className="text-xs text-neutral-400 mt-0.5">
+                          {meta.desc}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Cards Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
+                      {items.map((skill) => (
+                        <SkillCard
+                          key={skill.id}
+                          skill={skill}
+                          onSelect={handleOpenSkill}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           ) : (
             <div
