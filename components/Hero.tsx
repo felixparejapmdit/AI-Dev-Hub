@@ -4,16 +4,17 @@ import { ArrowRight, Zap, Shield, GitBranch } from "lucide-react";
 
 interface HeroProps {
   onExplore: () => void;
+  onOpenLaunchpad: () => void;
 }
 
 const STATS = [
   { label: "AI Models", value: "50+" },
   { label: "MCP Servers", value: "200+" },
   { label: "Skills", value: "100+" },
-  { label: "No Login", value: "Ever" },
+  { label: "No Auth Walls", value: "100% Free" },
 ];
 
-export default function Hero({ onExplore }: HeroProps) {
+export default function Hero({ onExplore, onOpenLaunchpad }: HeroProps) {
   return (
     <section className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden grid-texture">
       {/* Ambient orbs */}
@@ -78,13 +79,14 @@ export default function Hero({ onExplore }: HeroProps) {
             Explore Catalog
             <ArrowRight size={18} />
           </button>
-          <a
-            href="#launchpad"
+          <button
+            id="hero-launchpad-button"
+            onClick={onOpenLaunchpad}
             className="btn-ghost text-base px-8 py-3.5"
           >
             <Zap size={18} />
             Open Launchpad
-          </a>
+          </button>
         </div>
 
         {/* Stats */}

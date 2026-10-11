@@ -6,9 +6,10 @@ import { Menu, X, Zap, ShoppingCart } from "lucide-react";
 interface NavbarProps {
   cartCount: number;
   onCartClick: () => void;
+  onLaunchpadClick?: () => void;
 }
 
-export default function Navbar({ cartCount, onCartClick }: NavbarProps) {
+export default function Navbar({ cartCount, onCartClick, onLaunchpadClick }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -84,9 +85,9 @@ export default function Navbar({ cartCount, onCartClick }: NavbarProps) {
             >
               Skills
             </a>
-            <a
-              href="#launchpad"
-              className="text-sm font-medium transition-colors"
+            <button
+              onClick={onLaunchpadClick || onCartClick}
+              className="text-sm font-medium transition-colors cursor-pointer bg-transparent border-none"
               style={{ color: "var(--color-text-secondary)" }}
               onMouseEnter={(e) =>
                 ((e.target as HTMLElement).style.color = "var(--color-text-primary)")
@@ -96,7 +97,7 @@ export default function Navbar({ cartCount, onCartClick }: NavbarProps) {
               }
             >
               Launchpad
-            </a>
+            </button>
           </div>
 
           {/* Cart Button */}
@@ -142,15 +143,22 @@ export default function Navbar({ cartCount, onCartClick }: NavbarProps) {
           style={{ borderColor: "var(--color-border)" }}
         >
           {["#models", "#mcp", "#skills", "#launchpad"].map((href) => (
-            <a
+            <button
               key={href}
-              href={href}
-              className="text-sm py-2 capitalize"
+              className="text-sm py-2 capitalize text-left bg-transparent border-none cursor-pointer"
               style={{ color: "var(--color-text-secondary)" }}
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (href === "#launchpad") {
+                  (onLaunchpadClick || onCartClick)();
+                } else {
+                  const el = document.querySelector(href);
+                  el?.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
             >
               {href.replace("#", "")}
-            </a>
+            </button>
           ))}
         </div>
       )}

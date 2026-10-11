@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { AIModel, MCPServer, Skill, WorkspaceCartItem } from "@/types";
 import { MOCK_MODELS, MOCK_MCP_SERVERS, MOCK_SKILLS } from "@/lib/mock-data";
 import Navbar from "@/components/Navbar";
@@ -99,6 +99,32 @@ export default function HomePage() {
   // Workspace cart state
   const [cartItems, setCartItems] = useState<WorkspaceCartItem[]>([]);
   const [launchpadOpen, setLaunchpadOpen] = useState(false);
+
+  // Sync with #launchpad in URL hash
+  useEffect(() => {
+    const checkHash = () => {
+      if (window.location.hash === "#launchpad") {
+        setLaunchpadOpen(true);
+      }
+    };
+    checkHash();
+    window.addEventListener("hashchange", checkHash);
+    return () => window.removeEventListener("hashchange", checkHash);
+  }, []);
+
+  const openLaunchpad = () => {
+    setLaunchpadOpen(true);
+    if (window.location.hash !== "#launchpad") {
+      window.location.hash = "#launchpad";
+    }
+  };
+
+  const closeLaunchpad = () => {
+    setLaunchpadOpen(false);
+    if (window.location.hash === "#launchpad") {
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+  };
 
   // Search state
   const [modelSearch, setModelSearch] = useState("");
@@ -206,11 +232,15 @@ export default function HomePage() {
       {/* Navbar */}
       <Navbar
         cartCount={cartItems.length}
-        onCartClick={() => setLaunchpadOpen(true)}
+        onCartClick={openLaunchpad}
+        onLaunchpadClick={openLaunchpad}
       />
 
       {/* Hero */}
-      <Hero onExplore={() => catalogRef.current?.scrollIntoView({ behavior: "smooth" })} />
+      <Hero
+        onExplore={() => catalogRef.current?.scrollIntoView({ behavior: "smooth" })}
+        onOpenLaunchpad={openLaunchpad}
+      />
 
       {/* Catalog */}
       <main ref={catalogRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
@@ -386,7 +416,7 @@ export default function HomePage() {
           items={cartItems}
           onRemove={removeFromCart}
           onClear={clearCart}
-          onClose={() => setLaunchpadOpen(false)}
+          onClose={closeLaunchpad}
         />
       )}
     </div>
