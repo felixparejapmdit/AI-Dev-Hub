@@ -1,20 +1,20 @@
 "use client";
 
 import { ArrowRight, Zap, Shield, GitBranch } from "lucide-react";
+import { MOCK_MODELS, MOCK_MCP_SERVERS, MOCK_SKILLS } from "@/lib/mock-data";
 
 interface HeroProps {
   onExplore: () => void;
   onOpenLaunchpad: () => void;
 }
 
-const STATS = [
-  { label: "AI Models", value: "50+" },
-  { label: "MCP Servers", value: "200+" },
-  { label: "Skills", value: "100+" },
-  { label: "No Auth Walls", value: "100% Free" },
-];
-
 export default function Hero({ onExplore, onOpenLaunchpad }: HeroProps) {
+  const stats = [
+    { label: "AI Models", value: `${MOCK_MODELS.length}` },
+    { label: "MCP Servers", value: `${MOCK_MCP_SERVERS.length}` },
+    { label: "Skills", value: `${MOCK_SKILLS.length}` },
+    { label: "No Auth Walls", value: "100% Free" },
+  ];
   return (
     <section className="relative w-full py-24 px-4 sm:px-6 lg:px-8 overflow-hidden grid-texture">
       {/* Ambient orbs */}
@@ -91,7 +91,7 @@ export default function Hero({ onExplore, onOpenLaunchpad }: HeroProps) {
 
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto mb-12">
-          {STATS.map((stat) => (
+          {stats.map((stat) => (
             <div
               key={stat.label}
               className="glass-card px-4 py-5 text-center"

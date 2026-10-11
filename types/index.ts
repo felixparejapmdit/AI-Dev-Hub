@@ -34,6 +34,12 @@ export interface AIModel {
   apiSlug?: string;
   iconUrl?: string;
   tags: string[];
+  githubUrl?: string;
+  youtubeUrl?: string;
+  docsUrl?: string;
+  paperUrl?: string;
+  latestUpdate?: string;
+  updateDate?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -49,6 +55,10 @@ export interface MCPServer {
   stars: number;
   npmPackage?: string;
   tags: string[];
+  youtubeUrl?: string;
+  docsUrl?: string;
+  latestUpdate?: string;
+  updateDate?: string;
   lastSyncedAt?: string;
   createdAt: string;
   updatedAt: string;
@@ -63,6 +73,11 @@ export interface Skill {
   tags: string[];
   author?: string;
   useCount: number;
+  githubUrl?: string;
+  youtubeUrl?: string;
+  docsUrl?: string;
+  latestUpdate?: string;
+  updateDate?: string;
   createdAt: string;
   updatedAt: string;
 }
