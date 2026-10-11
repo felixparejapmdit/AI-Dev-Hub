@@ -1,18 +1,17 @@
 "use client";
 
-import { useState, useMemo, useRef, useEffect } from "react";
-import { AIModel, MCPServer, Skill, WorkspaceCartItem } from "@/types";
+import { useState, useMemo, useRef } from "react";
+import { AIModel, MCPServer, Skill } from "@/types";
 import { MOCK_MODELS, MOCK_MCP_SERVERS, MOCK_SKILLS } from "@/lib/mock-data";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import ModelCard from "@/components/ModelCard";
 import MCPCard from "@/components/MCPCard";
 import SkillCard from "@/components/SkillCard";
-import LaunchpadPanel from "@/components/LaunchpadPanel";
+import ResourceDetailModal from "@/components/ResourceDetailModal";
 import SearchBar from "@/components/SearchBar";
 import Footer from "@/components/Footer";
-import toast from "react-hot-toast";
-import { Brain, Server, Sparkles, Filter } from "lucide-react";
+import { Brain, Server, Sparkles, Filter, Layers } from "lucide-react";
 
 // ─── Section Header ───────────────────────────────────────────────────────────
 function SectionHeader({
@@ -34,7 +33,7 @@ function SectionHeader({
     <div className="mb-8">
       <div className="flex items-center gap-3 mb-2">
         <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center"
+          className="w-10 h-10 rounded-xl flex items-center justify-center shadow-md"
           style={{ background: `${accentColor}20`, border: `1px solid ${accentColor}30` }}
         >
           <Icon size={20} style={{ color: accentColor }} />
@@ -49,10 +48,10 @@ function SectionHeader({
           </h2>
         </div>
         <span
-          className="ml-auto text-sm font-mono font-semibold px-3 py-1 rounded-full"
+          className="ml-auto text-xs sm:text-sm font-mono font-semibold px-3 py-1 rounded-full"
           style={{ background: `${accentColor}15`, color: accentColor }}
         >
-          {count} items
+          {count} components
         </span>
       </div>
       <p className="text-sm pl-[52px]" style={{ color: "var(--color-text-secondary)" }}>
@@ -79,7 +78,7 @@ function FilterPills({
         <button
           key={opt}
           onClick={() => onChange(opt === selected ? "" : opt)}
-          className="px-3 py-1 rounded-full text-xs font-semibold transition-all duration-150"
+          className="px-3 py-1 rounded-full text-xs font-semibold transition-all duration-150 cursor-pointer"
           style={{
             background: selected === opt ? "var(--color-blue-dim)" : "var(--glass-bg)",
             border: `1px solid ${selected === opt ? "rgba(59,130,246,0.4)" : "var(--color-border)"}`,
@@ -97,45 +96,43 @@ function FilterPills({
 export default function HomePage() {
   const catalogRef = useRef<HTMLDivElement>(null);
 
-  // Workspace cart state
-  const [cartItems, setCartItems] = useState<WorkspaceCartItem[]>([]);
-  const [launchpadOpen, setLaunchpadOpen] = useState(false);
+  // Inspector modal state
+  const [selectedItem, setSelectedItem] = useState<AIModel | MCPServer | Skill | null>(null);
+  const [selectedType, setSelectedType] = useState<"model" | "mcp" | "skill" | null>(null);
 
-  // Sync with #launchpad in URL hash
-  useEffect(() => {
-    const checkHash = () => {
-      if (window.location.hash === "#launchpad") {
-        setLaunchpadOpen(true);
-      }
-    };
-    checkHash();
-    window.addEventListener("hashchange", checkHash);
-    return () => window.removeEventListener("hashchange", checkHash);
-  }, []);
-
-  const openLaunchpad = () => {
-    setLaunchpadOpen(true);
-    if (window.location.hash !== "#launchpad") {
-      window.location.hash = "#launchpad";
-    }
-  };
-
-  const closeLaunchpad = () => {
-    setLaunchpadOpen(false);
-    if (window.location.hash === "#launchpad") {
-      history.replaceState(null, "", window.location.pathname + window.location.search);
-    }
-  };
+  // Global LLM Ecosystem filter
+  const [ecosystemFilter, setEcosystemFilter] = useState<string>("");
 
   // Search state
   const [modelSearch, setModelSearch] = useState("");
   const [mcpSearch, setMcpSearch] = useState("");
   const [skillSearch, setSkillSearch] = useState("");
 
-  // Filter state
+  // Type & category filters
   const [modelTypeFilter, setModelTypeFilter] = useState("");
   const [mcpCategoryFilter, setMcpCategoryFilter] = useState("");
   const [skillCategoryFilter, setSkillCategoryFilter] = useState("");
+
+  // Handlers to open detail modal
+  const handleOpenModel = (model: AIModel) => {
+    setSelectedItem(model);
+    setSelectedType("model");
+  };
+
+  const handleOpenMCP = (server: MCPServer) => {
+    setSelectedItem(server);
+    setSelectedType("mcp");
+  };
+
+  const handleOpenSkill = (skill: Skill) => {
+    setSelectedItem(skill);
+    setSelectedType("skill");
+  };
+
+  const handleCloseModal = () => {
+    setSelectedItem(null);
+    setSelectedType(null);
+  };
 
   // ── Filtered lists ──
   const filteredModels = useMemo(() => {
@@ -147,9 +144,20 @@ export default function HomePage() {
         m.provider.toLowerCase().includes(q) ||
         m.tags.some((t) => t.toLowerCase().includes(q));
       const matchesType = !modelTypeFilter || m.type === modelTypeFilter;
-      return matchesSearch && matchesType;
+
+      let matchesEco = true;
+      if (ecosystemFilter) {
+        const ecoLower = ecosystemFilter.toLowerCase();
+        matchesEco =
+          m.provider.toLowerCase().includes(ecoLower) ||
+          m.name.toLowerCase().includes(ecoLower) ||
+          m.tags.some((t) => t.toLowerCase().includes(ecoLower)) ||
+          (m.compatibleLLMs?.some((c) => c.toLowerCase().includes(ecoLower)) ?? false);
+      }
+
+      return matchesSearch && matchesType && matchesEco;
     });
-  }, [modelSearch, modelTypeFilter]);
+  }, [modelSearch, modelTypeFilter, ecosystemFilter]);
 
   const filteredMCP = useMemo(() => {
     return MOCK_MCP_SERVERS.filter((s) => {
@@ -160,9 +168,19 @@ export default function HomePage() {
         s.description?.toLowerCase().includes(q) ||
         s.tags.some((t) => t.toLowerCase().includes(q));
       const matchesCat = !mcpCategoryFilter || s.category === mcpCategoryFilter;
-      return matchesSearch && matchesCat;
+
+      let matchesEco = true;
+      if (ecosystemFilter) {
+        const ecoLower = ecosystemFilter.toLowerCase();
+        matchesEco =
+          s.tags.some((t) => t.toLowerCase().includes(ecoLower)) ||
+          (s.author?.toLowerCase().includes(ecoLower) ?? false) ||
+          (s.compatibleLLMs?.some((c) => c.toLowerCase().includes(ecoLower)) ?? false);
+      }
+
+      return matchesSearch && matchesCat && matchesEco;
     });
-  }, [mcpSearch, mcpCategoryFilter]);
+  }, [mcpSearch, mcpCategoryFilter, ecosystemFilter]);
 
   const filteredSkills = useMemo(() => {
     return MOCK_SKILLS.filter((s) => {
@@ -173,85 +191,97 @@ export default function HomePage() {
         s.description?.toLowerCase().includes(q) ||
         s.tags.some((t) => t.toLowerCase().includes(q));
       const matchesCat = !skillCategoryFilter || s.category === skillCategoryFilter;
-      return matchesSearch && matchesCat;
+
+      let matchesEco = true;
+      if (ecosystemFilter) {
+        const ecoLower = ecosystemFilter.toLowerCase();
+        matchesEco =
+          s.tags.some((t) => t.toLowerCase().includes(ecoLower)) ||
+          s.title.toLowerCase().includes(ecoLower) ||
+          (s.compatibleLLMs?.some((c) => c.toLowerCase().includes(ecoLower)) ?? false);
+      }
+
+      return matchesSearch && matchesCat && matchesEco;
     });
-  }, [skillSearch, skillCategoryFilter]);
+  }, [skillSearch, skillCategoryFilter, ecosystemFilter]);
 
-  // ── Cart handlers ──
-  const isInCart = (id: string) => cartItems.some((i) => i.id === id);
-
-  const toggleModel = (model: AIModel) => {
-    if (isInCart(model.id)) {
-      setCartItems((prev) => prev.filter((i) => i.id !== model.id));
-      toast(`Removed ${model.name}`, { icon: "🗑️" });
-    } else {
-      setCartItems((prev) => [
-        ...prev,
-        { id: model.id, type: "model", item: model },
-      ]);
-      toast.success(`Added ${model.name}`);
-    }
-  };
-
-  const toggleMCP = (server: MCPServer) => {
-    if (isInCart(server.id)) {
-      setCartItems((prev) => prev.filter((i) => i.id !== server.id));
-      toast(`Removed ${server.name}`, { icon: "🗑️" });
-    } else {
-      setCartItems((prev) => [
-        ...prev,
-        { id: server.id, type: "mcp", item: server },
-      ]);
-      toast.success(`Added ${server.name}`);
-    }
-  };
-
-  const toggleSkill = (skill: Skill) => {
-    if (isInCart(skill.id)) {
-      setCartItems((prev) => prev.filter((i) => i.id !== skill.id));
-      toast(`Removed ${skill.title}`, { icon: "🗑️" });
-    } else {
-      setCartItems((prev) => [
-        ...prev,
-        { id: skill.id, type: "skill", item: skill },
-      ]);
-      toast.success(`Added ${skill.title}`);
-    }
-  };
-
-  const removeFromCart = (id: string) => {
-    setCartItems((prev) => prev.filter((i) => i.id !== id));
-  };
-
-  const clearCart = () => {
-    setCartItems([]);
-    toast("Workspace cleared", { icon: "🧹" });
-  };
+  const ecosystems = [
+    { label: "All Ecosystems", value: "" },
+    { label: "Claude (Anthropic)", value: "Claude" },
+    { label: "Gemini (Google)", value: "Gemini" },
+    { label: "Nous Hermes", value: "Hermes" },
+    { label: "OpenCode", value: "OpenCode" },
+    { label: "DeepSeek", value: "DeepSeek" },
+    { label: "OpenAI", value: "OpenAI" },
+  ];
 
   return (
     <div className="min-h-screen">
       {/* Navbar */}
-      <Navbar
-        cartCount={cartItems.length}
-        onCartClick={openLaunchpad}
-        onLaunchpadClick={openLaunchpad}
-      />
+      <Navbar />
 
       {/* Hero */}
       <Hero
         onExplore={() => catalogRef.current?.scrollIntoView({ behavior: "smooth" })}
-        onOpenLaunchpad={openLaunchpad}
+        onSelectEcosystem={(eco) => setEcosystemFilter(eco)}
       />
 
-      {/* Catalog */}
+      {/* Main Catalog */}
       <main ref={catalogRef} className="w-full max-w-7xl 2xl:max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
+        {/* Global LLM Ecosystem Bar */}
+        <div
+          className="mb-14 p-5 rounded-2xl border flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
+          style={{
+            background: "linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(139, 92, 246, 0.05) 100%)",
+            borderColor: "rgba(255, 255, 255, 0.1)",
+          }}
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-blue-500/20 text-blue-400 border border-blue-500/30">
+              <Layers size={18} />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                <span>Filter by Current LLM Ecosystem</span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/20">
+                  Live
+                </span>
+              </h3>
+              <p className="text-xs text-neutral-400">
+                Instantly shows models, MCP tools, and skills compatible with your preferred AI environment.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-2 w-full md:w-auto">
+            {ecosystems.map((eco) => {
+              const active = ecosystemFilter === eco.value;
+              return (
+                <button
+                  key={eco.value}
+                  onClick={() => setEcosystemFilter(eco.value)}
+                  className="px-3 py-1.5 rounded-xl text-xs font-semibold font-mono transition-all cursor-pointer"
+                  style={{
+                    background: active ? "var(--color-blue)" : "rgba(255, 255, 255, 0.05)",
+                    border: `1px solid ${active ? "var(--color-blue)" : "rgba(255, 255, 255, 0.1)"}`,
+                    color: active ? "#ffffff" : "var(--color-text-secondary)",
+                    boxShadow: active ? "0 0 15px rgba(59, 130, 246, 0.4)" : "none",
+                  }}
+                >
+                  {eco.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* ── AI Models Section ─────────────────────────────── */}
         <section className="mb-24">
           <SectionHeader
             id="models"
             icon={Brain}
-            title="AI Models"
-            description="The latest and most capable LLMs — cloud, local, and hybrid. Click to add to your workspace."
+            title="Frontier AI Models"
+            description="Continuously updated LLMs for cloud APIs, local Ollama, and agent runtimes. Click any card to inspect release updates, YouTube guides, and GitHub repos."
             count={filteredModels.length}
             accentColor="var(--color-blue)"
           />
@@ -263,7 +293,7 @@ export default function HomePage() {
                 id="search-models"
                 value={modelSearch}
                 onChange={setModelSearch}
-                placeholder="Search 50+ models, providers, tags..."
+                placeholder="Search models, providers (Claude, Gemini, Hermes, OpenCode...)"
               />
             </div>
             <div className="flex items-center gap-2">
@@ -283,8 +313,7 @@ export default function HomePage() {
                 <ModelCard
                   key={model.id}
                   model={model}
-                  isSelected={isInCart(model.id)}
-                  onToggle={toggleModel}
+                  onSelect={handleOpenModel}
                 />
               ))}
             </div>
@@ -293,7 +322,7 @@ export default function HomePage() {
               className="py-16 text-center rounded-2xl"
               style={{ border: "1px dashed var(--color-border)", color: "var(--color-text-muted)" }}
             >
-              No models found for &quot;{modelSearch}&quot;
+              No models found matching your filters.
             </div>
           )}
         </section>
@@ -303,8 +332,8 @@ export default function HomePage() {
           <SectionHeader
             id="mcp"
             icon={Server}
-            title="MCP Servers"
-            description="Model Context Protocol servers that give your AI direct access to databases, tools, and services."
+            title="Model Context Protocol (MCP) Tools"
+            description="Community & official MCP servers granting models direct filesystem, database, and terminal capabilities. Click to view install command and docs."
             count={filteredMCP.length}
             accentColor="var(--color-emerald)"
           />
@@ -316,7 +345,7 @@ export default function HomePage() {
                 id="search-mcp"
                 value={mcpSearch}
                 onChange={setMcpSearch}
-                placeholder="Search MCP servers, categories..."
+                placeholder="Search MCP tools, categories..."
               />
             </div>
             <div className="flex items-center gap-2 flex-wrap">
@@ -336,8 +365,7 @@ export default function HomePage() {
                 <MCPCard
                   key={server.id}
                   server={server}
-                  isSelected={isInCart(server.id)}
-                  onToggle={toggleMCP}
+                  onSelect={handleOpenMCP}
                 />
               ))}
             </div>
@@ -346,7 +374,7 @@ export default function HomePage() {
               className="py-16 text-center rounded-2xl"
               style={{ border: "1px dashed var(--color-border)", color: "var(--color-text-muted)" }}
             >
-              No MCP servers found for &quot;{mcpSearch}&quot;
+              No MCP servers found matching your filters.
             </div>
           )}
         </section>
@@ -356,8 +384,8 @@ export default function HomePage() {
           <SectionHeader
             id="skills"
             icon={Sparkles}
-            title="AI Skills"
-            description="Expert-crafted system prompts that turn any LLM into a specialized AI assistant."
+            title="Specialized Agent Skills & Prompts"
+            description="Expert-tuned system directives for Claude Computer Use, Gemini Multimodal, Hermes Tool Calling, and OpenCode Autonomous Engineering."
             count={filteredSkills.length}
             accentColor="var(--color-violet)"
           />
@@ -389,8 +417,7 @@ export default function HomePage() {
                 <SkillCard
                   key={skill.id}
                   skill={skill}
-                  isSelected={isInCart(skill.id)}
-                  onToggle={toggleSkill}
+                  onSelect={handleOpenSkill}
                 />
               ))}
             </div>
@@ -399,7 +426,7 @@ export default function HomePage() {
               className="py-16 text-center rounded-2xl"
               style={{ border: "1px dashed var(--color-border)", color: "var(--color-text-muted)" }}
             >
-              No skills found for &quot;{skillSearch}&quot;
+              No skills found matching your filters.
             </div>
           )}
         </section>
@@ -409,19 +436,12 @@ export default function HomePage() {
       {/* ── Footer ───────────────────────────────────────── */}
       <Footer />
 
-      {/* Launchpad Panel */}
-      {launchpadOpen && (
-        <LaunchpadPanel
-          items={cartItems}
-          onRemove={removeFromCart}
-          onClear={clearCart}
-          onClose={closeLaunchpad}
-          onLoadTemplate={(newItems) => {
-            setCartItems(newItems);
-            toast.success("Loaded starter stack!");
-          }}
-        />
-      )}
+      {/* ── Resource & Update Inspector Modal ─────────────── */}
+      <ResourceDetailModal
+        item={selectedItem}
+        type={selectedType}
+        onClose={handleCloseModal}
+      />
     </div>
   );
 }

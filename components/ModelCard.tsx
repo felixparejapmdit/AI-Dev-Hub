@@ -1,12 +1,11 @@
 "use client";
 
 import { AIModel } from "@/types";
-import { Plus, Check, Brain, Cpu, Cloud, Server, ExternalLink, Github, Youtube, BookOpen, Sparkles, Calendar } from "lucide-react";
+import { Brain, Cpu, Cloud, Server, ExternalLink, Github, Youtube, BookOpen, Sparkles, Calendar, ArrowRight } from "lucide-react";
 
 interface ModelCardProps {
   model: AIModel;
-  isSelected: boolean;
-  onToggle: (model: AIModel) => void;
+  onSelect: (model: AIModel) => void;
 }
 
 const TYPE_CONFIG = {
@@ -20,6 +19,8 @@ const PROVIDER_COLORS: Record<string, string> = {
   OpenAI: "#10a37f",
   Google: "#4285f4",
   DeepSeek: "#06b6d4",
+  "Nous Research": "#8b5cf6",
+  OpenCode: "#10b981",
   Meta: "#1877f2",
   "Mistral AI": "#ff7000",
   Qwen: "#8b5cf6",
@@ -35,7 +36,7 @@ function formatContext(ctx: number): string {
   return ctx.toString();
 }
 
-export default function ModelCard({ model, isSelected, onToggle }: ModelCardProps) {
+export default function ModelCard({ model, onSelect }: ModelCardProps) {
   const typeConfig = TYPE_CONFIG[model.type] || TYPE_CONFIG.CLOUD;
   const TypeIcon = typeConfig.icon;
   const providerColor = PROVIDER_COLORS[model.provider] ?? "#6366f1";
@@ -43,30 +44,15 @@ export default function ModelCard({ model, isSelected, onToggle }: ModelCardProp
   return (
     <div
       id={`model-${model.id}`}
-      className="glass-card p-5 cursor-pointer select-none relative overflow-hidden flex flex-col justify-between transition-all duration-200 hover:scale-[1.01]"
-      style={{
-        borderColor: isSelected ? "rgba(59, 130, 246, 0.6)" : undefined,
-        boxShadow: isSelected
-          ? "0 0 0 1px rgba(59,130,246,0.4), 0 8px 30px rgba(0,0,0,0.5)"
-          : undefined,
-      }}
-      onClick={() => onToggle(model)}
+      className="glass-card p-5 cursor-pointer select-none relative overflow-hidden flex flex-col justify-between transition-all duration-200 hover:scale-[1.01] hover:border-blue-500/50 group"
+      onClick={() => onSelect(model)}
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => e.key === "Enter" && onToggle(model)}
-      aria-pressed={isSelected}
+      onKeyDown={(e) => e.key === "Enter" && onSelect(model)}
     >
-      {/* Selection glow overlay */}
-      {isSelected && (
-        <div
-          className="absolute inset-0 pointer-events-none rounded-2xl"
-          style={{ background: "linear-gradient(135deg, rgba(59,130,246,0.08), transparent)" }}
-        />
-      )}
-
       {/* Provider accent bar */}
       <div
-        className="absolute top-0 left-0 right-0 h-1"
+        className="absolute top-0 left-0 right-0 h-1 transition-all group-hover:h-1.5"
         style={{ background: `linear-gradient(90deg, transparent, ${providerColor}, transparent)` }}
       />
 
@@ -75,15 +61,13 @@ export default function ModelCard({ model, isSelected, onToggle }: ModelCardProp
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
             <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-inner"
+              className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-inner transition-transform group-hover:scale-105"
               style={{ background: `${providerColor}20`, border: `1px solid ${providerColor}40` }}
             >
               <Brain size={20} style={{ color: providerColor }} />
             </div>
             <div>
-              <h3
-                className="font-bold text-sm leading-tight text-white group-hover:text-blue-400 transition-colors"
-              >
+              <h3 className="font-bold text-sm leading-tight text-white group-hover:text-blue-400 transition-colors">
                 {model.name}
               </h3>
               <p className="text-xs font-medium mt-0.5" style={{ color: providerColor }}>
@@ -92,31 +76,17 @@ export default function ModelCard({ model, isSelected, onToggle }: ModelCardProp
             </div>
           </div>
 
-          {/* Select button */}
-          <button
-            className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-200 cursor-pointer"
-            style={{
-              background: isSelected ? "var(--color-blue)" : "var(--glass-bg)",
-              border: `1px solid ${isSelected ? "var(--color-blue)" : "var(--color-border)"}`,
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggle(model);
-            }}
-            aria-label={isSelected ? "Remove from workspace" : "Add to workspace"}
-          >
-            {isSelected ? (
-              <Check size={14} className="text-white" />
-            ) : (
-              <Plus size={14} style={{ color: "var(--color-text-muted)" }} />
-            )}
-          </button>
+          {/* Inspect Details Badge */}
+          <div className="flex items-center gap-1 text-[11px] font-mono font-medium px-2.5 py-1 rounded-lg bg-white/5 group-hover:bg-blue-500/20 text-neutral-400 group-hover:text-blue-300 border border-white/10 group-hover:border-blue-500/30 transition-all">
+            <span>Updates</span>
+            <ArrowRight size={11} className="group-hover:translate-x-0.5 transition-transform" />
+          </div>
         </div>
 
-        {/* Latest Update Pill */}
+        {/* Latest Update Banner */}
         {model.latestUpdate && (
           <div
-            className="mb-3 px-2.5 py-1.5 rounded-lg text-xs flex items-center gap-2 border"
+            className="mb-3 px-2.5 py-1.5 rounded-lg text-xs flex items-center gap-2 border transition-all"
             style={{
               background: "rgba(59, 130, 246, 0.08)",
               borderColor: "rgba(59, 130, 246, 0.2)",
@@ -135,10 +105,7 @@ export default function ModelCard({ model, isSelected, onToggle }: ModelCardProp
 
         {/* Description */}
         {model.description && (
-          <p
-            className="text-xs leading-relaxed mb-3 line-clamp-2"
-            style={{ color: "var(--color-text-secondary)" }}
-          >
+          <p className="text-xs leading-relaxed mb-3 line-clamp-2" style={{ color: "var(--color-text-secondary)" }}>
             {model.description}
           </p>
         )}
@@ -149,20 +116,14 @@ export default function ModelCard({ model, isSelected, onToggle }: ModelCardProp
             <TypeIcon size={12} style={{ color: "var(--color-text-muted)" }} />
             <span className={`badge ${typeConfig.color}`}>{typeConfig.label}</span>
           </div>
-          <div
-            className="flex items-center gap-1 text-xs font-mono"
-            style={{ color: "var(--color-text-secondary)" }}
-          >
+          <div className="flex items-center gap-1 text-xs font-mono" style={{ color: "var(--color-text-secondary)" }}>
             <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>ctx:</span>
             <span className="font-semibold" style={{ color: "var(--color-emerald)" }}>
               {formatContext(model.contextWindow)}
             </span>
           </div>
           {model.releaseDate && (
-            <div
-              className="flex items-center gap-1 text-[11px] font-mono ml-auto"
-              style={{ color: "var(--color-text-muted)" }}
-            >
+            <div className="flex items-center gap-1 text-[11px] font-mono ml-auto" style={{ color: "var(--color-text-muted)" }}>
               <Calendar size={11} />
               <span>{model.releaseDate}</span>
             </div>

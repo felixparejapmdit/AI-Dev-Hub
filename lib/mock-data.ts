@@ -899,8 +899,172 @@ export const MOCK_MODELS: AIModel[] = [
     docsUrl: "https://docs.perplexity.ai",
     latestUpdate: "Integrated real-time financial and scientific datasets",
     updateDate: "Feb 2025",
+    compatibleLLMs: ["Perplexity", "Claude", "Gemini", "GPT-4o"],
+    quickstartSnippet: `import { OpenAI } from "openai";
+const client = new OpenAI({ apiKey: process.env.PERPLEXITY_API_KEY, baseURL: "https://api.perplexity.ai" });
+const response = await client.chat.completions.create({
+  model: "sonar-reasoning-pro",
+  messages: [{ role: "user", content: "What are the latest breakthrough updates in quantum computing?" }],
+});
+console.log(response.choices[0].message.content);`,
+    updateHighlights: [
+      "Real-time verifiable citation links with confidence intervals",
+      "Chain-of-thought breakdown before external web query synthesis",
+      "Financial market and arXiv live knowledge grounding"
+    ],
     createdAt: "2025-01-28T00:00:00Z",
     updatedAt: "2025-02-01T00:00:00Z",
+  },
+
+  // ── Nous Hermes Family ──
+  {
+    id: "hermes-3-405b",
+    name: "Hermes 3 405B",
+    provider: "Nous Research",
+    type: "LOCAL",
+    contextWindow: 131072,
+    description: "Frontier open-weights steerable intelligence trained on Llama 3.1 405B with state-of-the-art agentic tool use, multi-step planning, and complex code generation.",
+    releaseDate: "2024-08-15",
+    apiSlug: "NousResearch/Hermes-3-Llama-3.1-405B",
+    tags: ["frontier", "agentic", "tool-use", "steerable", "hermes", "open-weights"],
+    githubUrl: "https://github.com/NousResearch/Hermes-Function-Calling",
+    youtubeUrl: "https://www.youtube.com/watch?v=Jm2JgUaRkW8",
+    docsUrl: "https://nousresearch.com/hermes3",
+    latestUpdate: "v3.2: FP8 & GGUF quantization weights published for vLLM & Ollama",
+    updateDate: "Feb 2025",
+    compatibleLLMs: ["Hermes", "Claude", "Gemini", "OpenCode", "DeepSeek", "GPT-4o"],
+    quickstartSnippet: `# Run locally with Ollama or vLLM:
+ollama run hermes3:405b
+
+# Or serve high-throughput with vLLM:
+vllm serve NousResearch/Hermes-3-Llama-3.1-405B --tensor-parallel-size 8 --quantization fp8`,
+    updateHighlights: [
+      "91.4% success rate on complex multi-turn function calling benchmarks",
+      "Advanced steerability prompt format allowing complete zero-shot behavior adaptation",
+      "Trained on over 300,000 synthetic agentic trajectories and code verification loops"
+    ],
+    createdAt: "2024-08-15T00:00:00Z",
+    updatedAt: "2025-02-15T00:00:00Z",
+  },
+  {
+    id: "hermes-3-70b",
+    name: "Hermes 3 70B",
+    provider: "Nous Research",
+    type: "LOCAL",
+    contextWindow: 131072,
+    description: "Premier local agentic model fine-tuned for deep long-context reasoning, tool integration, and full-stack code synthesis on consumer hardware.",
+    releaseDate: "2024-08-15",
+    apiSlug: "NousResearch/Hermes-3-Llama-3.1-70B",
+    tags: ["agentic", "tool-use", "coding", "open-weights", "local", "hermes"],
+    githubUrl: "https://github.com/NousResearch/Hermes-3",
+    youtubeUrl: "https://www.youtube.com/watch?v=s5eA0uC3e8E",
+    docsUrl: "https://nousresearch.com",
+    latestUpdate: "Optimized Ollama & llama.cpp quantization profiles (Q4_K_M)",
+    updateDate: "Jan 2025",
+    compatibleLLMs: ["Hermes", "Claude", "Gemini", "OpenCode", "DeepSeek"],
+    quickstartSnippet: `# 1-command local launch on dual 3090/4090 or Mac Studio:
+ollama run hermes3:70b
+
+# Test function-calling in Python:
+from openai import OpenAI
+client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")`,
+    updateHighlights: [
+      "Runs at 40+ tokens/sec on consumer GPUs with FP8/Q4 quantization",
+      "Specialized system prompts for autonomous vibe-coding workflows",
+      "Native support for custom XML/JSON tool schemas"
+    ],
+    createdAt: "2024-08-15T00:00:00Z",
+    updatedAt: "2025-01-20T00:00:00Z",
+  },
+  {
+    id: "openhermes-2-5-mistral-7b",
+    name: "OpenHermes 2.5 Mistral 7B",
+    provider: "Nous Research",
+    type: "LOCAL",
+    contextWindow: 32768,
+    description: "Community-favorite lightweight local LLM fine-tuned on 1M high-grade synthetic reasoning, code, and agent conversations.",
+    releaseDate: "2023-11-20",
+    apiSlug: "teknium/OpenHermes-2.5-Mistral-7B",
+    tags: ["lightweight", "fast", "local", "community-favorite", "hermes"],
+    githubUrl: "https://github.com/teknium1/GPTeacher",
+    youtubeUrl: "https://www.youtube.com/watch?v=i9YQhY8v7x8",
+    docsUrl: "https://huggingface.co/teknium/OpenHermes-2.5-Mistral-7B",
+    latestUpdate: "Over 2.5M downloads on HuggingFace; instant laptop offline setup",
+    updateDate: "Dec 2024",
+    compatibleLLMs: ["Hermes", "Claude", "Gemini", "OpenCode"],
+    quickstartSnippet: `# Ultra-fast local execution on laptop CPU/GPU:
+ollama run openhermes:latest`,
+    updateHighlights: [
+      "Sub-20ms first-token latency on Apple M-series chips",
+      "Zero internet connection required for 100% offline vibe-coding",
+      "Trained on curated GPTeacher synthetic reasoning datasets"
+    ],
+    createdAt: "2023-11-20T00:00:00Z",
+    updatedAt: "2024-12-10T00:00:00Z",
+  },
+
+  // ── OpenCode Family ──
+  {
+    id: "opencode-interpreter",
+    name: "OpenCode Interpreter",
+    provider: "OpenCode",
+    type: "LOCAL",
+    contextWindow: 128000,
+    description: "Autonomous open-source code runtime that connects LLMs (Claude, Gemini, Hermes, DeepSeek) directly to your terminal, files, and browsers.",
+    releaseDate: "2024-09-12",
+    apiSlug: "open-interpreter",
+    tags: ["coding-agent", "terminal", "autonomous", "opencode", "execution"],
+    githubUrl: "https://github.com/open-interpreter/open-interpreter",
+    youtubeUrl: "https://www.youtube.com/watch?v=2f3q4_F6XJ8",
+    docsUrl: "https://docs.openinterpreter.com",
+    latestUpdate: "v0.4.5: Native Claude 3.7 & Gemini 2.5 Pro Computer-Use bridge",
+    updateDate: "Mar 2025",
+    compatibleLLMs: ["OpenCode", "Claude", "Gemini", "Hermes", "DeepSeek", "GPT-4o"],
+    quickstartSnippet: `# Install Open-Interpreter:
+pip install open-interpreter
+
+# Run with local Hermes or Claude:
+interpreter --model hermes3
+# or with Anthropic:
+interpreter --model claude-3-7-sonnet`,
+    updateHighlights: [
+      "Executes Python, Shell, and AppleScript directly on your OS with safety prompts",
+      "Full local desktop vision and GUI automation support",
+      "Zero cloud lock-in: toggle seamlessly between Ollama models and cloud APIs"
+    ],
+    createdAt: "2024-09-12T00:00:00Z",
+    updatedAt: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "opencode-deepseek-coder",
+    name: "OpenCode DeepSeek-Coder 33B",
+    provider: "OpenCode",
+    type: "LOCAL",
+    contextWindow: 128000,
+    description: "Project-wide repository analysis, automated refactoring, and test synthesis engine powered by 33B code-specialized parameters.",
+    releaseDate: "2024-07-10",
+    apiSlug: "deepseek-ai/deepseek-coder-33b-instruct",
+    tags: ["coding", "debugging", "open-source", "opencode", "local"],
+    githubUrl: "https://github.com/deepseek-ai/DeepSeek-Coder",
+    youtubeUrl: "https://www.youtube.com/watch?v=3z8mQ0kU910",
+    docsUrl: "https://huggingface.co/deepseek-ai/deepseek-coder-33b-instruct",
+    latestUpdate: "Unified AST syntax parser with zero-shot test suite generation",
+    updateDate: "Feb 2025",
+    compatibleLLMs: ["OpenCode", "Hermes", "Claude", "Gemini", "DeepSeek"],
+    quickstartSnippet: `# Pull and run in Ollama:
+ollama run deepseek-coder:33b
+
+# Use directly inside Cursor / VSCode Continue extension:
+{
+  "models": [{ "title": "OpenCode 33B", "model": "deepseek-coder:33b", "provider": "ollama" }]
+}`,
+    updateHighlights: [
+      "79.3% pass@1 on HumanEval coding benchmark",
+      "Full repository AST context ingestion for large codebases",
+      "Trained on 2 Trillion tokens of clean multi-language code"
+    ],
+    createdAt: "2024-07-10T00:00:00Z",
+    updatedAt: "2025-02-18T00:00:00Z",
   },
 ];
 
@@ -1327,5 +1491,132 @@ Write documentation that developers love:
 4. Maintain active voice, concise paragraphs, and intuitive visual hierarchy.`,
     createdAt: "2024-12-01T00:00:00Z",
     updatedAt: "2024-12-15T00:00:00Z",
+  },
+  {
+    id: "skill-claude-computer-use",
+    title: "Claude 3.7 & 3.5 Computer Use Agent",
+    description: "Autonomous OS navigation, mouse coordinates, bash execution, and browser interaction prompt engineered for Claude models.",
+    category: "DEVOPS",
+    author: "Anthropic Community",
+    useCount: 28400,
+    tags: ["claude", "computer-use", "automation", "bash", "browser"],
+    githubUrl: "https://github.com/anthropics/anthropic-quickstarts/tree/main/computer-use-demo",
+    youtubeUrl: "https://www.youtube.com/watch?v=ODaHGnN674s",
+    docsUrl: "https://docs.anthropic.com/en/docs/build-with-claude/computer-use",
+    latestUpdate: "v2.1: Sub-pixel coordinate mapping and dynamic retry loops",
+    updateDate: "Feb 2025",
+    compatibleLLMs: ["Claude", "OpenCode"],
+    quickstartSnippet: `// Use with Anthropic Computer Use API beta:
+import Anthropic from "@anthropic-ai/sdk";
+const anthropic = new Anthropic();
+const response = await anthropic.beta.messages.create({
+  model: "claude-3-7-sonnet-20250219",
+  betas: ["computer-use-2024-10-22"],
+  tools: [{ type: "computer_20241022", name: "computer", display_width_px: 1920, display_height_px: 1080 }],
+  messages: [{ role: "user", content: "Open Firefox, navigate to GitHub, and star the AI-Dev-Hub repo." }]
+});`,
+    updateHighlights: [
+      "Optimized for 1920x1080 and 4K display resolution scaling",
+      "Self-correcting error loop when mouse clicks fail to trigger DOM state",
+      "Strict safety boundary verification before executing bash commands"
+    ],
+    systemPrompt: `You are an expert autonomous Computer Use Agent powered by Claude.
+1. When receiving screen coordinates, always calibrate against display boundaries (1920x1080 standard).
+2. Issue coordinate-based clicks with verification screenshots before following with typing actions.
+3. Before executing destructive terminal commands (rm, drop, kill), require explicit operator confirmation.
+4. Report intermediate state changes clearly to the human observer.`,
+    createdAt: "2024-11-01T00:00:00Z",
+    updatedAt: "2025-02-20T00:00:00Z",
+  },
+  {
+    id: "skill-gemini-multimodal-architect",
+    title: "Gemini 2.5 Long-Context & Video Architect",
+    description: "Ingests entire repositories, hour-long video files, and system audio feeds leveraging Gemini 2.5's 2M-token window.",
+    category: "RESEARCH",
+    author: "Google Devs",
+    useCount: 22100,
+    tags: ["gemini", "2m-tokens", "video-analysis", "codebase-ingestion"],
+    githubUrl: "https://github.com/google-gemini/cookbook",
+    youtubeUrl: "https://www.youtube.com/watch?v=UIzar4k97zY",
+    docsUrl: "https://ai.google.dev/gemini-api/docs/multimodal",
+    latestUpdate: "Full 2M token context window indexing with second-level video timestamps",
+    updateDate: "Mar 2025",
+    compatibleLLMs: ["Gemini"],
+    quickstartSnippet: `import { GoogleGenerativeAI } from "@google/generative-ai";
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro-preview" });
+const result = await model.generateContent([
+  "Analyze this 2-hour software architecture video recording and output chapter timestamps with code diffs."
+]);`,
+    updateHighlights: [
+      "Processes 2 hours of 1080p 30fps video natively without downsampling",
+      "Zero needle-in-a-haystack retrieval loss across 2 Million tokens",
+      "Correlates spoken speech with on-screen code transitions"
+    ],
+    systemPrompt: `You are a Principal AI Systems Architect leveraging Google Gemini's 2M token multimodal window.
+1. Cross-reference video frames, audio transcription, and raw code files with millisecond accuracy.
+2. Provide chapter timestamps [MM:SS] for every major architectural transition.
+3. When analyzing large repositories, map out dependency graphs before diagnosing defects.
+4. Output structured markdown summaries suitable for technical engineering leads.`,
+    createdAt: "2024-12-15T00:00:00Z",
+    updatedAt: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "skill-hermes-agentic-function-caller",
+    title: "Hermes 3 Steerable Tool Orchestrator",
+    description: "Structured JSON function-calling schema, autonomous tool selection, and stateful agentic loops for Nous Hermes 3.",
+    category: "CODING",
+    author: "Nous Research",
+    useCount: 19500,
+    tags: ["hermes", "function-calling", "agentic", "steerable", "json-schema"],
+    githubUrl: "https://github.com/NousResearch/Hermes-Function-Calling",
+    youtubeUrl: "https://www.youtube.com/watch?v=s5eA0uC3e8E",
+    docsUrl: "https://nousresearch.com",
+    latestUpdate: "Added multi-step tool call graph with automatic rollback handling",
+    updateDate: "Feb 2025",
+    compatibleLLMs: ["Hermes", "Claude", "OpenCode"],
+    quickstartSnippet: `<tools>
+{"name": "fetch_api_docs", "description": "Fetches raw API documentation for a library", "parameters": {"type": "object", "properties": {"package": {"type": "string"}}}}
+</tools>
+Use Hermes XML tool calling syntax to invoke tools seamlessly in Ollama or vLLM.`,
+    updateHighlights: [
+      "Guaranteed JSON Schema adherence without external grammar engines",
+      "Supports parallel tool invocations in a single token generation step",
+      "Trained on over 300,000 multi-tool conversational trajectories"
+    ],
+    systemPrompt: `You are Hermes 3, an agentic AI with premier tool-calling intelligence created by Nous Research.
+When tools are provided in <tools></tools>, analyze user intent and respond strictly with <tool_call> tags containing valid JSON.
+After tool execution feedback is returned in <tool_response>, synthesize the result into clear, actionable advice.`,
+    createdAt: "2024-09-01T00:00:00Z",
+    updatedAt: "2025-02-10T00:00:00Z",
+  },
+  {
+    id: "skill-opencode-engineer",
+    title: "OpenCode Autonomous Engineer",
+    description: "End-to-end fullstack vibe-coding prompt for Open-Interpreter, Claude, and DeepSeek, running terminal tests and writing production code.",
+    category: "CODING",
+    author: "OpenCode Community",
+    useCount: 31200,
+    tags: ["opencode", "autonomous-coding", "terminal", "testing", "fullstack"],
+    githubUrl: "https://github.com/open-interpreter/open-interpreter",
+    youtubeUrl: "https://www.youtube.com/watch?v=2f3q4_F6XJ8",
+    docsUrl: "https://docs.openinterpreter.com",
+    latestUpdate: "Test-Driven Development (TDD) automated test loop with zero human intervention",
+    updateDate: "Mar 2025",
+    compatibleLLMs: ["OpenCode", "Claude", "Gemini", "Hermes", "DeepSeek"],
+    quickstartSnippet: `# Run autonomous engineer with Open Interpreter:
+interpreter --custom_instructions "You are an Autonomous Staff Software Engineer. Write tests first, then write clean minimal code."`,
+    updateHighlights: [
+      "Auto-detects npm, pnpm, cargo, pip, and go build systems",
+      "Executes test suites and self-corrects compile/runtime errors automatically",
+      "Produces clean git commits formatted with Conventional Commits specifications"
+    ],
+    systemPrompt: `You are an Autonomous Staff Software Engineer powered by OpenCode.
+1. Always inspect the current repository structure and package manifest before writing any code.
+2. Follow Test-Driven Development: run the test command to confirm baseline failure, then write minimal code to pass.
+3. Keep code modular, clean, and strictly typed.
+4. When done, verify that all linters and tests exit cleanly with status code 0.`,
+    createdAt: "2024-10-15T00:00:00Z",
+    updatedAt: "2025-03-05T00:00:00Z",
   },
 ];

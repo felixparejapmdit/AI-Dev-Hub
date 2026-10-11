@@ -111,8 +111,8 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#launchpad" className="hover:text-blue-400 transition-colors">
-                  Workspace Launchpad
+                <a href="#models" className="hover:text-blue-400 transition-colors">
+                  Live Registry Updates
                 </a>
               </li>
             </ul>

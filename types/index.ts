@@ -40,6 +40,9 @@ export interface AIModel {
   paperUrl?: string;
   latestUpdate?: string;
   updateDate?: string;
+  compatibleLLMs?: string[];
+  quickstartSnippet?: string;
+  updateHighlights?: string[];
   createdAt: string;
   updatedAt: string;
 }
@@ -48,6 +51,7 @@ export interface MCPServer {
   id: string;
   name: string;
   repoUrl: string;
+  githubUrl?: string;
   installCommand: string;
   description?: string;
   category: MCPCategory;
@@ -59,6 +63,9 @@ export interface MCPServer {
   docsUrl?: string;
   latestUpdate?: string;
   updateDate?: string;
+  compatibleLLMs?: string[];
+  quickstartSnippet?: string;
+  updateHighlights?: string[];
   lastSyncedAt?: string;
   createdAt: string;
   updatedAt: string;
@@ -78,6 +85,9 @@ export interface Skill {
   docsUrl?: string;
   latestUpdate?: string;
   updateDate?: string;
+  compatibleLLMs?: string[];
+  quickstartSnippet?: string;
+  updateHighlights?: string[];
   createdAt: string;
   updatedAt: string;
 }
