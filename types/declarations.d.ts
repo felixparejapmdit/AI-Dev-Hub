@@ -1,0 +1,51 @@
+declare module 'lucide-react' {
+  import * as React from 'react';
+  export type LucideIcon = React.FC<React.SVGProps<SVGSVGElement> & { size?: number | string; className?: string; strokeWidth?: number | string }>;
+
+  export const ArrowRight: LucideIcon;
+  export const BookOpen: LucideIcon;
+  export const Bot: LucideIcon;
+  export const Box: LucideIcon;
+  export const Brain: LucideIcon;
+  export const Check: LucideIcon;
+  export const CheckCircle2: LucideIcon;
+  export const ChevronRight: LucideIcon;
+  export const Cloud: LucideIcon;
+  export const Code2: LucideIcon;
+  export const Compass: LucideIcon;
+  export const Copy: LucideIcon;
+  export const Cpu: LucideIcon;
+  export const Database: LucideIcon;
+  export const Download: LucideIcon;
+  export const ExternalLink: LucideIcon;
+  export const Filter: LucideIcon;
+  export const Flame: LucideIcon;
+  export const FolderOpen: LucideIcon;
+  export const GitBranch: LucideIcon;
+  export const GitFork: LucideIcon;
+  export const Globe: LucideIcon;
+  export const Laptop: LucideIcon;
+  export const Layers: LucideIcon;
+  export const Lightbulb: LucideIcon;
+  export const LineChart: LucideIcon;
+  export const Menu: LucideIcon;
+  export const MessageSquare: LucideIcon;
+  export const Plus: LucideIcon;
+  export const RefreshCw: LucideIcon;
+  export const Search: LucideIcon;
+  export const Server: LucideIcon;
+  export const Shield: LucideIcon;
+  export const ShoppingCart: LucideIcon;
+  export const Sliders: LucideIcon;
+  export const Sparkles: LucideIcon;
+  export const Star: LucideIcon;
+  export const Terminal: LucideIcon;
+  export const Trash2: LucideIcon;
+  export const TrendingUp: LucideIcon;
+  export const Wrench: LucideIcon;
+  export const X: LucideIcon;
+  export const Zap: LucideIcon;
+
+  const icons: Record<string, LucideIcon>;
+  export default icons;
+}
