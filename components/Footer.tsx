@@ -206,7 +206,7 @@ export default function Footer() {
           }}
         >
           <div className="flex items-center gap-3">
-            <span>© 2025 VibeLaunch · Built for AI Developers & Vibe Coders</span>
+            <span>© 2026 VibeLaunch · Built for AI Developers & Vibe Coders</span>
             <span>·</span>
             <span>MIT License</span>
           </div>
