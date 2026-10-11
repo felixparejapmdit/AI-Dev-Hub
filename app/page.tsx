@@ -243,7 +243,7 @@ export default function HomePage() {
       />
 
       {/* Catalog */}
-      <main ref={catalogRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
+      <main ref={catalogRef} className="w-full max-w-7xl 2xl:max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
         {/* ── AI Models Section ─────────────────────────────── */}
         <section className="mb-24">
           <SectionHeader
@@ -276,7 +276,7 @@ export default function HomePage() {
 
           {/* Grid */}
           {filteredModels.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
               {filteredModels.map((model) => (
                 <ModelCard
                   key={model.id}
@@ -328,7 +328,7 @@ export default function HomePage() {
 
           {/* Grid */}
           {filteredMCP.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
               {filteredMCP.map((server) => (
                 <MCPCard
                   key={server.id}
@@ -380,7 +380,7 @@ export default function HomePage() {
 
           {/* Grid */}
           {filteredSkills.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
               {filteredSkills.map((skill) => (
                 <SkillCard
                   key={skill.id}
@@ -417,6 +417,10 @@ export default function HomePage() {
           onRemove={removeFromCart}
           onClear={clearCart}
           onClose={closeLaunchpad}
+          onLoadTemplate={(newItems) => {
+            setCartItems(newItems);
+            toast.success("Loaded starter stack!");
+          }}
         />
       )}
     </div>

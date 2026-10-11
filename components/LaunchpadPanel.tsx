@@ -13,14 +13,17 @@ import {
   ChevronRight,
   Copy,
   Check,
+  Plus,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import { MOCK_MODELS, MOCK_MCP_SERVERS, MOCK_SKILLS } from "@/lib/mock-data";
 
 interface LaunchpadPanelProps {
   items: WorkspaceCartItem[];
   onRemove: (id: string) => void;
   onClear: () => void;
   onClose: () => void;
+  onLoadTemplate?: (templateItems: WorkspaceCartItem[]) => void;
 }
 
 const PLATFORMS: { id: TargetPlatform; label: string; desc: string; color: string }[] = [
@@ -55,6 +58,7 @@ export default function LaunchpadPanel({
   onRemove,
   onClear,
   onClose,
+  onLoadTemplate,
 }: LaunchpadPanelProps) {
   const [selectedPlatform, setSelectedPlatform] = useState<TargetPlatform>("antigravity");
   const [generatedConfig, setGeneratedConfig] = useState<GeneratedConfig | null>(null);
@@ -115,8 +119,8 @@ export default function LaunchpadPanel({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex"
-      style={{ background: "rgba(0,0,0,0.6)" }}
+      className="fixed inset-0 z-50 flex justify-end"
+      style={{ background: "rgba(0,0,0,0.75)", backdropFilter: "blur(6px)" }}
     >
       {/* Backdrop */}
       <div className="flex-1" onClick={onClose} />
@@ -124,19 +128,18 @@ export default function LaunchpadPanel({
       {/* Panel */}
       <div
         id="launchpad-panel"
-        className="w-full max-w-xl h-full overflow-y-auto flex flex-col"
+        className="w-full max-w-lg md:max-w-xl h-full overflow-y-auto flex flex-col shadow-2xl relative"
         style={{
-          background: "rgba(10,10,18,0.98)",
-          backdropFilter: "blur(40px)",
-          borderLeft: "1px solid var(--color-border)",
+          background: "#08080f",
+          borderLeft: "1px solid rgba(255,255,255,0.08)",
         }}
       >
         {/* Panel Header */}
         <div
           className="flex items-center justify-between p-6 sticky top-0 z-10"
           style={{
-            borderBottom: "1px solid var(--color-border)",
-            background: "rgba(10,10,18,0.98)",
+            borderBottom: "1px solid rgba(255,255,255,0.08)",
+            background: "#08080f",
             backdropFilter: "blur(24px)",
           }}
         >
@@ -161,7 +164,7 @@ export default function LaunchpadPanel({
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-xl flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-xl flex items-center justify-center transition-colors cursor-pointer"
             style={{
               background: "var(--glass-bg)",
               border: "1px solid var(--color-border)",
@@ -182,7 +185,7 @@ export default function LaunchpadPanel({
               {items.length > 0 && (
                 <button
                   onClick={onClear}
-                  className="text-xs flex items-center gap-1 transition-colors"
+                  className="text-xs flex items-center gap-1 transition-colors cursor-pointer"
                   style={{ color: "var(--color-text-muted)" }}
                   onMouseEnter={(e) =>
                     ((e.currentTarget as HTMLElement).style.color = "#ef4444")
@@ -199,14 +202,70 @@ export default function LaunchpadPanel({
 
             {items.length === 0 ? (
               <div
-                className="text-center py-10 rounded-xl"
+                className="text-center py-6 px-4 rounded-xl flex flex-col items-center"
                 style={{
                   border: "1px dashed var(--color-border)",
-                  color: "var(--color-text-muted)",
+                  background: "rgba(255,255,255,0.01)",
                 }}
               >
-                <p className="text-sm mb-1">Your workspace is empty</p>
-                <p className="text-xs">Click cards to add models, servers, and skills.</p>
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center mb-2"
+                  style={{ background: "rgba(59,130,246,0.1)", color: "var(--color-blue)" }}
+                >
+                  <Zap size={20} />
+                </div>
+                <p className="text-sm font-semibold mb-1" style={{ color: "var(--color-text-primary)" }}>
+                  Your workspace is empty
+                </p>
+                <p className="text-xs mb-4 max-w-xs leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
+                  Click &quot;+&quot; on cards in the catalog, or load a pre-configured starter stack below:
+                </p>
+                {onLoadTemplate && (
+                  <div className="w-full flex flex-col gap-2">
+                    <button
+                      onClick={() =>
+                        onLoadTemplate([
+                          { id: MOCK_MODELS[0].id, type: "model", item: MOCK_MODELS[0] },
+                          { id: MOCK_MCP_SERVERS[2].id, type: "mcp", item: MOCK_MCP_SERVERS[2] },
+                          { id: MOCK_SKILLS[0].id, type: "skill", item: MOCK_SKILLS[0] },
+                        ])
+                      }
+                      className="w-full py-2.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-between transition-all cursor-pointer hover:brightness-110"
+                      style={{
+                        background: "rgba(59,130,246,0.12)",
+                        border: "1px solid rgba(59,130,246,0.3)",
+                        color: "#60a5fa",
+                      }}
+                    >
+                      <span className="flex items-center gap-2">
+                        <Zap size={13} />
+                        Full-Stack AI Engineer Stack
+                      </span>
+                      <span className="opacity-80">+ Load</span>
+                    </button>
+                    <button
+                      onClick={() =>
+                        onLoadTemplate([
+                          { id: MOCK_MODELS[2].id, type: "model", item: MOCK_MODELS[2] },
+                          { id: MOCK_MCP_SERVERS[3].id, type: "mcp", item: MOCK_MCP_SERVERS[3] },
+                          { id: MOCK_SKILLS[5].id, type: "skill", item: MOCK_SKILLS[5] },
+                        ])
+                      }
+                      className="w-full py-2.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-between transition-all cursor-pointer hover:brightness-110"
+                      style={{
+                        background: "rgba(16,185,129,0.12)",
+                        border: "1px solid rgba(16,185,129,0.3)",
+                        color: "#34d399",
+                      }}
+                    >
+                      <span className="flex items-center gap-2">
+                        <Sparkles size={13} />
+                        Deep Research & Analysis Stack
+                      </span>
+                      <span className="opacity-80">+ Load</span>
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="flex flex-col gap-2">

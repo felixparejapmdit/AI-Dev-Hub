@@ -16,7 +16,7 @@ const STATS = [
 
 export default function Hero({ onExplore, onOpenLaunchpad }: HeroProps) {
   return (
-    <section className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden grid-texture">
+    <section className="relative w-full py-24 px-4 sm:px-6 lg:px-8 overflow-hidden grid-texture">
       {/* Ambient orbs */}
       <div
         className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full pointer-events-none"
@@ -33,7 +33,7 @@ export default function Hero({ onExplore, onOpenLaunchpad }: HeroProps) {
         }}
       />
 
-      <div className="relative max-w-5xl mx-auto text-center">
+      <div className="relative w-full max-w-5xl mx-auto text-center">
         {/* Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8"
           style={{
