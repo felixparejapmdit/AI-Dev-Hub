@@ -1342,6 +1342,278 @@ export const MOCK_MCP_SERVERS: MCPServer[] = [
     createdAt: "2024-12-10T00:00:00Z",
     updatedAt: "2025-01-20T00:00:00Z",
   },
+
+  // ── Essential Google Gemini MCPs ──
+  {
+    id: "mcp-google-workspace",
+    name: "Google Workspace & Drive MCP",
+    repoUrl: "https://github.com/modelcontextprotocol/servers/tree/main/src/google-drive",
+    installCommand: "npx -y @modelcontextprotocol/server-gdrive",
+    description: "Must-have for Gemini: Read and edit Google Docs, Google Sheets, Drive files, and draft Gmail responses directly.",
+    category: "COMMUNICATION",
+    author: "Google Cloud Community",
+    stars: 15400,
+    npmPackage: "@modelcontextprotocol/server-gdrive",
+    tags: ["google", "gemini", "drive", "workspace", "gmail", "docs"],
+    youtubeUrl: "https://www.youtube.com/watch?v=UIzar4k97zY",
+    docsUrl: "https://developers.google.com/workspace",
+    latestUpdate: "v1.4.0: Added live Google Sheets multi-cell batch update API",
+    updateDate: "Feb 2025",
+    compatibleLLMs: ["Gemini", "Claude", "OpenCode"],
+    quickstartSnippet: `// Add to Gemini / Claude MCP configuration:
+{
+  "mcpServers": {
+    "google-workspace": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-gdrive"]
+    }
+  }
+}`,
+    updateHighlights: [
+      "Official Google OAuth 2.0 PKCE authentication flow",
+      "Direct ingestion of Google Slides & spreadsheets into Gemini 2M context window",
+      "Zero local file storage required; streams cloud content directly"
+    ],
+    createdAt: "2024-12-01T00:00:00Z",
+    updatedAt: "2025-02-14T00:00:00Z",
+  },
+  {
+    id: "mcp-bigquery",
+    name: "Google BigQuery & Analytics MCP",
+    repoUrl: "https://github.com/google-gemini/cookbook",
+    installCommand: "npx -y @google-cloud/bigquery-mcp",
+    description: "Must-have for Gemini: Query petabyte-scale data lakes with automatic schema introspection and query cost estimations.",
+    category: "DATABASE",
+    author: "Google Cloud",
+    stars: 12100,
+    npmPackage: "@google-cloud/bigquery-mcp",
+    tags: ["bigquery", "sql", "gemini", "google", "analytics", "data-lake"],
+    youtubeUrl: "https://www.youtube.com/watch?v=D3jR4pZ6kLQ",
+    docsUrl: "https://cloud.google.com/bigquery/docs",
+    latestUpdate: "v2.0.1: Added dry-run cost estimation and partition pruning warnings",
+    updateDate: "Mar 2025",
+    compatibleLLMs: ["Gemini", "Claude", "Hermes"],
+    quickstartSnippet: `// BigQuery MCP configuration:
+{
+  "mcpServers": {
+    "bigquery": {
+      "command": "npx",
+      "args": ["-y", "@google-cloud/bigquery-mcp", "--project", "your-gcp-project-id"]
+    }
+  }
+}`,
+    updateHighlights: [
+      "Automatic dry-run bytes processed calculation before query execution",
+      "Full integration with Gemini 2.5 code execution reasoning loops",
+      "Native support for nested REPEATED RECORD BigQuery schemas"
+    ],
+    createdAt: "2024-12-10T00:00:00Z",
+    updatedAt: "2025-03-01T00:00:00Z",
+  },
+
+  // ── Essential Nous Hermes MCPs ──
+  {
+    id: "mcp-hermes-function-engine",
+    name: "Nous Hermes Tool Dispatcher MCP",
+    repoUrl: "https://github.com/NousResearch/Hermes-Function-Calling",
+    installCommand: "npx -y @nousresearch/hermes-tool-dispatcher",
+    description: "Must-have for Hermes: Specialized XML <tools> parser and parallel execution engine engineered for Hermes 3 function calling.",
+    category: "AI",
+    author: "Nous Research",
+    stars: 14800,
+    npmPackage: "@nousresearch/hermes-tool-dispatcher",
+    tags: ["hermes", "function-calling", "agentic", "xml-tools", "dispatch"],
+    youtubeUrl: "https://www.youtube.com/watch?v=Jm2JgUaRkW8",
+    docsUrl: "https://nousresearch.com/hermes3",
+    latestUpdate: "v2.2.0: Added parallel multi-tool call execution with auto-rollback",
+    updateDate: "Feb 2025",
+    compatibleLLMs: ["Hermes", "OpenCode", "Claude"],
+    quickstartSnippet: `// Configure Hermes tool dispatcher in Ollama/vLLM:
+{
+  "mcpServers": {
+    "hermes-dispatcher": {
+      "command": "npx",
+      "args": ["-y", "@nousresearch/hermes-tool-dispatcher", "--port", "8085"]
+    }
+  }
+}`,
+    updateHighlights: [
+      "91.4% success rate on complex multi-turn function calling benchmarks",
+      "Translates standard OpenAPI specs into Hermes 3 XML prompt format on the fly",
+      "Runs seamlessly alongside local Ollama or vLLM inference backends"
+    ],
+    createdAt: "2024-11-15T00:00:00Z",
+    updatedAt: "2025-02-12T00:00:00Z",
+  },
+  {
+    id: "mcp-ollama-bridge",
+    name: "Ollama & vLLM Local Engine MCP",
+    repoUrl: "https://github.com/ollama/ollama",
+    installCommand: "npx -y @ollama/mcp-bridge",
+    description: "Must-have for Hermes & Local LLMs: Hot-swap local model weights, monitor GPU VRAM, and stream tokens at zero latency.",
+    category: "DEVTOOLS",
+    author: "Community",
+    stars: 21300,
+    npmPackage: "@ollama/mcp-bridge",
+    tags: ["ollama", "vllm", "local", "gpu", "vram", "hermes", "deepseek"],
+    youtubeUrl: "https://www.youtube.com/watch?v=s5eA0uC3e8E",
+    docsUrl: "https://ollama.com",
+    latestUpdate: "v1.5.0: Dynamic VRAM tiering and Apple Silicon Metal acceleration",
+    updateDate: "Feb 2025",
+    compatibleLLMs: ["Hermes", "OpenCode", "DeepSeek"],
+    quickstartSnippet: `// Connect Ollama bridge:
+{
+  "mcpServers": {
+    "ollama-bridge": {
+      "command": "npx",
+      "args": ["-y", "@ollama/mcp-bridge", "http://localhost:11434"]
+    }
+  }
+}`,
+    updateHighlights: [
+      "Instant inspection of loaded models and available GPU memory layers",
+      "Zero-latency streaming bridge for local agentic loops",
+      "Supports GGUF, AWQ, and FP8 quantized weights"
+    ],
+    createdAt: "2024-11-20T00:00:00Z",
+    updatedAt: "2025-02-10T00:00:00Z",
+  },
+
+  // ── Essential OpenCode MCPs ──
+  {
+    id: "mcp-terminal-executor",
+    name: "OpenCode Terminal & Shell MCP",
+    repoUrl: "https://github.com/open-interpreter/open-interpreter",
+    installCommand: "npx -y @opencode/terminal-executor-mcp",
+    description: "Must-have for OpenCode: Interactive, persistent shell runner allowing autonomous models to run npm, git, and python safely.",
+    category: "DEVTOOLS",
+    author: "OpenCode Foundation",
+    stars: 24700,
+    npmPackage: "@opencode/terminal-executor-mcp",
+    tags: ["opencode", "terminal", "bash", "powershell", "execution", "agent"],
+    youtubeUrl: "https://www.youtube.com/watch?v=2f3q4_F6XJ8",
+    docsUrl: "https://docs.openinterpreter.com",
+    latestUpdate: "v3.1.0: Real-time stdout stream decoding & timeout protection",
+    updateDate: "Mar 2025",
+    compatibleLLMs: ["OpenCode", "Claude", "Hermes", "DeepSeek"],
+    quickstartSnippet: `// Configure OpenCode Terminal Executor:
+{
+  "mcpServers": {
+    "opencode-terminal": {
+      "command": "npx",
+      "args": ["-y", "@opencode/terminal-executor-mcp", "--cwd", "."]
+    }
+  }
+}`,
+    updateHighlights: [
+      "Interactive command confirmation flags to safeguard filesystem deletion",
+      "Persistent environment variables across multi-step agent actions",
+      "Captures standard error and exit codes for automatic self-healing loops"
+    ],
+    createdAt: "2024-10-25T00:00:00Z",
+    updatedAt: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "mcp-python-repl",
+    name: "OpenCode Python REPL & Jupyter MCP",
+    repoUrl: "https://github.com/open-interpreter/open-interpreter",
+    installCommand: "npx -y @opencode/python-repl-mcp",
+    description: "Must-have for OpenCode: In-process Python notebook execution with live dataframe inspection and chart rendering.",
+    category: "CODE",
+    author: "OpenCode Community",
+    stars: 18200,
+    npmPackage: "@opencode/python-repl-mcp",
+    tags: ["python", "repl", "jupyter", "opencode", "charts", "data-science"],
+    youtubeUrl: "https://www.youtube.com/watch?v=3z8mQ0kU910",
+    docsUrl: "https://docs.openinterpreter.com",
+    latestUpdate: "v2.4.0: Headless Matplotlib image export directly to model vision",
+    updateDate: "Feb 2025",
+    compatibleLLMs: ["OpenCode", "Claude", "Gemini", "Hermes"],
+    quickstartSnippet: `// Python REPL configuration:
+{
+  "mcpServers": {
+    "python-repl": {
+      "command": "npx",
+      "args": ["-y", "@opencode/python-repl-mcp"]
+    }
+  }
+}`,
+    updateHighlights: [
+      "Isolated virtualenv execution with automatic pip package resolution",
+      "Direct base64 image generation for models with multimodal vision input",
+      "Full Pandas and NumPy memory persistence between user turns"
+    ],
+    createdAt: "2024-11-05T00:00:00Z",
+    updatedAt: "2025-02-15T00:00:00Z",
+  },
+
+  // ── Essential DeepSeek MCPs ──
+  {
+    id: "mcp-deepseek-lsp",
+    name: "DeepSeek Language Server (LSP) MCP",
+    repoUrl: "https://github.com/deepseek-ai/DeepSeek-Coder",
+    installCommand: "npx -y @deepseek/lsp-mcp-server",
+    description: "Must-have for DeepSeek: Full AST syntax tree resolution, symbol renames, and type-definition lookups for 300+ languages.",
+    category: "CODE",
+    author: "DeepSeek Community",
+    stars: 16900,
+    npmPackage: "@deepseek/lsp-mcp-server",
+    tags: ["deepseek", "lsp", "ast", "type-definitions", "code-intelligence"],
+    youtubeUrl: "https://www.youtube.com/watch?v=ZtN3x0yXFq8",
+    docsUrl: "https://api-docs.deepseek.com",
+    latestUpdate: "v2.0.0: Incremental AST parsing for 100k+ line codebases",
+    updateDate: "Feb 2025",
+    compatibleLLMs: ["DeepSeek", "OpenCode", "Claude"],
+    quickstartSnippet: `// DeepSeek LSP Server config:
+{
+  "mcpServers": {
+    "deepseek-lsp": {
+      "command": "npx",
+      "args": ["-y", "@deepseek/lsp-mcp-server", "--workspace", "."]
+    }
+  }
+}`,
+    updateHighlights: [
+      "Provides exact compiler error spans to DeepSeek R1 reasoning models",
+      "Zero hallucination symbol resolution across multi-package monorepos",
+      "Supports TypeScript, Python, Rust, Go, C++, and Java language servers"
+    ],
+    createdAt: "2024-12-05T00:00:00Z",
+    updatedAt: "2025-02-20T00:00:00Z",
+  },
+  {
+    id: "mcp-compiler-runner",
+    name: "Compiler Diagnostics & Build MCP",
+    repoUrl: "https://github.com/deepseek-ai/DeepSeek-Coder-V2",
+    installCommand: "npx -y @deepseek/compiler-diagnostics-mcp",
+    description: "Must-have for DeepSeek: Feeds real-time Cargo, Clang, Rustc, and TSC compiler errors directly into LLM reasoning loops.",
+    category: "DEVTOOLS",
+    author: "DeepSeek Community",
+    stars: 13400,
+    npmPackage: "@deepseek/compiler-diagnostics-mcp",
+    tags: ["compiler", "rustc", "clang", "deepseek", "diagnostics", "build"],
+    youtubeUrl: "https://www.youtube.com/watch?v=uK1X_bS97qA",
+    docsUrl: "https://api-docs.deepseek.com",
+    latestUpdate: "v1.2.0: Added Rust borrow checker error diagnostic breakdown",
+    updateDate: "Jan 2025",
+    compatibleLLMs: ["DeepSeek", "OpenCode", "Hermes"],
+    quickstartSnippet: `// Compiler Diagnostics MCP:
+{
+  "mcpServers": {
+    "compiler-runner": {
+      "command": "npx",
+      "args": ["-y", "@deepseek/compiler-diagnostics-mcp"]
+    }
+  }
+}`,
+    updateHighlights: [
+      "Pipes rustc and gcc ANSI color errors into structured JSON diagnostics",
+      "Enables automated compile-fix-recompile self-healing agent cycles",
+      "Supports cargo test, pytest, and jest automated test runner capture"
+    ],
+    createdAt: "2024-12-15T00:00:00Z",
+    updatedAt: "2025-01-25T00:00:00Z",
+  },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1618,5 +1890,204 @@ interpreter --custom_instructions "You are an Autonomous Staff Software Engineer
 4. When done, verify that all linters and tests exit cleanly with status code 0.`,
     createdAt: "2024-10-15T00:00:00Z",
     updatedAt: "2025-03-05T00:00:00Z",
+  },
+
+  // ── Essential Skills for Claude ──
+  {
+    id: "skill-claude-extended-thinking",
+    title: "Claude 3.7 Extended Thinking Architect",
+    description: "Must-have for Claude: Configures dynamic reasoning token budgets, test-driven validation, and mathematical proof architecture.",
+    category: "CODING",
+    author: "Anthropic Engineering",
+    useCount: 34100,
+    tags: ["claude", "extended-thinking", "reasoning-budget", "architecture", "test-driven"],
+    githubUrl: "https://github.com/anthropics/anthropic-cookbook",
+    youtubeUrl: "https://www.youtube.com/watch?v=kYUPbYpMvsw",
+    docsUrl: "https://docs.anthropic.com/en/docs/about-claude/models",
+    latestUpdate: "Optimized for Claude 3.7 Sonnet dynamic budget up to 64k thinking tokens",
+    updateDate: "Feb 2025",
+    compatibleLLMs: ["Claude"],
+    quickstartSnippet: `import Anthropic from "@anthropic-ai/sdk";
+const anthropic = new Anthropic();
+const response = await anthropic.messages.create({
+  model: "claude-3-7-sonnet-20250219",
+  max_tokens: 20000,
+  thinking: { type: "enabled", budget_tokens: 16000 },
+  messages: [{ role: "user", content: "Architect a lock-free concurrent queue in Rust with formal safety proofs." }]
+});`,
+    updateHighlights: [
+      "Dynamic token allocation allows the model to ponder edge cases before emitting code",
+      "Reduces hallucination rate on complex distributed concurrency problems by 88%",
+      "Generates comprehensive invariant checklists before writing production logic"
+    ],
+    systemPrompt: `You are an elite Systems Architect leveraging Claude 3.7 Sonnet's extended thinking capabilities.
+1. Formulate a rigorous step-by-step hypothesis before proposing architectural changes.
+2. Pressure-test all assumptions against edge conditions (race conditions, memory exhaustion, network partitions).
+3. Validate each invariant mathematically or via executable property-based test suites.
+4. Output clean, strictly typed, production-ready code with exhaustive inline documentation.`,
+    createdAt: "2025-02-24T00:00:00Z",
+    updatedAt: "2025-02-24T00:00:00Z",
+  },
+
+  // ── Essential Skills for Gemini ──
+  {
+    id: "skill-gemini-codebase-ingest",
+    title: "Gemini 2.5 2M-Token Codebase Refactorer",
+    description: "Must-have for Gemini: Ingests entire monorepos and dependency graphs to isolate circular dependencies and execute clean architectural migrations.",
+    category: "CODING",
+    author: "Google Cloud",
+    useCount: 26800,
+    tags: ["gemini", "monorepo", "refactoring", "2m-tokens", "codebase"],
+    githubUrl: "https://github.com/google-gemini/cookbook",
+    youtubeUrl: "https://www.youtube.com/watch?v=UIzar4k97zY",
+    docsUrl: "https://ai.google.dev",
+    latestUpdate: "v2.1: AST dependency matrix mapping across multi-package projects",
+    updateDate: "Mar 2025",
+    compatibleLLMs: ["Gemini"],
+    quickstartSnippet: `import { GoogleGenerativeAI } from "@google/generative-ai";
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro-preview" });
+const result = await model.generateContent([
+  "Analyze our entire 500k-line backend codebase and propose a step-by-step migration to ESM modules without breaking backwards compatibility."
+]);`,
+    updateHighlights: [
+      "2 Million token context window eliminates the need for lossy vector chunking",
+      "Maps cross-module circular imports and dead code paths across entire repositories",
+      "Generates safe, staged migration PR diffs that can be applied incrementally"
+    ],
+    systemPrompt: `You are a Principal Software Modernization Architect leveraging Google Gemini's 2M-token window.
+1. When analyzing large repositories, construct a complete dependency graph before suggesting modifications.
+2. Identify architectural smell: tight coupling, hidden global state, and circular dependencies.
+3. Formulate zero-downtime, backwards-compatible refactoring plans with atomic rollback steps.
+4. Provide precise file diffs and verify that public API contracts remain unviolated.`,
+    createdAt: "2024-12-20T00:00:00Z",
+    updatedAt: "2025-03-01T00:00:00Z",
+  },
+
+  // ── Essential Skills for Nous Hermes ──
+  {
+    id: "skill-hermes-json-schema",
+    title: "Hermes 3 Strict JSON Schema Synthesizer",
+    description: "Must-have for Hermes: 100% adherence to complex nested JSON schemas, SQL migrations, and API payload contracts.",
+    category: "CODING",
+    author: "Nous Research",
+    useCount: 21900,
+    tags: ["hermes", "json-schema", "structured-data", "sql", "steerable"],
+    githubUrl: "https://github.com/NousResearch/Hermes-3",
+    youtubeUrl: "https://www.youtube.com/watch?v=s5eA0uC3e8E",
+    docsUrl: "https://nousresearch.com",
+    latestUpdate: "Guaranteed zero extra tokens or markdown wrapping outside JSON envelope",
+    updateDate: "Jan 2025",
+    compatibleLLMs: ["Hermes", "Claude", "OpenCode"],
+    quickstartSnippet: `# System prompt format for Hermes 3 strict schema:
+<schema>
+{"$schema": "http://json-schema.org/draft-07/schema#", "type": "object", "properties": {"status": {"type": "string"}}}
+</schema>
+Respond strictly with valid JSON conforming to the schema above.`,
+    updateHighlights: [
+      "Zero preamble or conversational filler; outputs raw valid JSON immediately",
+      "Handles deeply nested arrays, regex string constraints, and enum validators",
+      "Trained on over 100,000 synthetic validation schema tests"
+    ],
+    systemPrompt: `You are Hermes 3 Structured Output Specialist.
+When a JSON schema or database contract is provided, output strictly a single valid JSON document conforming 100% to the specification.
+Do not output markdown code blocks, conversational pleasantries, or explanations. Respond with valid JSON only.`,
+    createdAt: "2024-11-10T00:00:00Z",
+    updatedAt: "2025-01-20T00:00:00Z",
+  },
+
+  // ── Essential Skills for OpenCode ──
+  {
+    id: "skill-opencode-debugger",
+    title: "OpenCode Bug Hunter & Auto-Patcher",
+    description: "Must-have for OpenCode: Writes minimal failing reproduction tests, isolates bug causality, and delivers atomic git patches.",
+    category: "CODING",
+    author: "OpenCode Community",
+    useCount: 29800,
+    tags: ["opencode", "debugging", "reproduction", "git-patch", "tdd"],
+    githubUrl: "https://github.com/open-interpreter/open-interpreter",
+    youtubeUrl: "https://www.youtube.com/watch?v=2f3q4_F6XJ8",
+    docsUrl: "https://docs.openinterpreter.com",
+    latestUpdate: "v2.8.0: Automated reproduction script generation and git bisect integration",
+    updateDate: "Feb 2025",
+    compatibleLLMs: ["OpenCode", "Claude", "Hermes", "DeepSeek"],
+    quickstartSnippet: `# Run OpenCode Bug Hunter:
+interpreter --custom_instructions "You are an Automated Bug Hunter. Write a standalone test reproducing the bug first, then fix it."`,
+    updateHighlights: [
+      "Never guesses fixes; verifies bugs through an isolated reproduction test first",
+      "Analyzes stack traces, heap snapshots, and async event loop deadlocks",
+      "Formats changes as standard git diff patches with explanatory commit messages"
+    ],
+    systemPrompt: `You are an Autonomous Staff Debugging Engineer powered by OpenCode.
+1. When presented with a defect, write a minimal reproduction script that fails deterministically.
+2. Trace root cause through logs, stack traces, and variable state inspection.
+3. Formulate the smallest surgical patch that eliminates the defect without side effects.
+4. Re-run the reproduction test to prove that it passes cleanly.`,
+    createdAt: "2024-11-18T00:00:00Z",
+    updatedAt: "2025-02-22T00:00:00Z",
+  },
+
+  // ── Essential Skills for DeepSeek ──
+  {
+    id: "skill-deepseek-r1-reasoner",
+    title: "DeepSeek R1 First-Principles Reasoner",
+    description: "Must-have for DeepSeek: Reinforcement-learning chain of thought directive for complex competitive algorithms, math proofs, and kernel internals.",
+    category: "CODING",
+    author: "DeepSeek AI",
+    useCount: 36700,
+    tags: ["deepseek", "r1", "reasoning", "math", "algorithms", "reinforcement"],
+    githubUrl: "https://github.com/deepseek-ai/DeepSeek-R1",
+    youtubeUrl: "https://www.youtube.com/watch?v=uK1X_bS97qA",
+    docsUrl: "https://api-docs.deepseek.com",
+    latestUpdate: "Optimized for DeepSeek R1 <think></think> multi-turn reflection tokens",
+    updateDate: "Jan 2025",
+    compatibleLLMs: ["DeepSeek", "Hermes", "OpenCode"],
+    quickstartSnippet: `<think>
+1. Identify base mathematical relations.
+2. Search for counterexamples before committing to a proof.
+3. Synthesize algorithmic solution with O(N log N) time complexity.
+</think>
+DeepSeek R1 reflection tokens provide unprecedented logical rigor.`,
+    updateHighlights: [
+      "Unlocks DeepSeek R1's internal self-reflection and error-correction loops",
+      "Proven to solve Codeforces Div 1 algorithmic challenges and AIME math problems",
+      "Explicitly checks for integer overflow, boundary conditions, and algorithmic time complexity"
+    ],
+    systemPrompt: `You are a World-Class Algorithmic Specialist powered by DeepSeek R1.
+1. Always analyze problems from first principles, decomposing complex requirements into verifiable sub-problems.
+2. Explicitly evaluate Big-O time and space complexity before writing any code.
+3. Actively seek edge cases and counterexamples to your own hypothesis during reasoning.
+4. Output optimal, clean C++, Rust, or Python code with formal proofs of correctness.`,
+    createdAt: "2025-01-20T00:00:00Z",
+    updatedAt: "2025-01-20T00:00:00Z",
+  },
+  {
+    id: "skill-deepseek-coder-polyglot",
+    title: "DeepSeek Coder Polyglot Translator",
+    description: "Must-have for DeepSeek: Translates legacy codebases (Java, C++, PHP) into modern high-performance Rust, TypeScript, and Go.",
+    category: "CODING",
+    author: "DeepSeek Community",
+    useCount: 24500,
+    tags: ["deepseek", "polyglot", "rust", "go", "translation", "legacy-migration"],
+    githubUrl: "https://github.com/deepseek-ai/DeepSeek-Coder-V2",
+    youtubeUrl: "https://www.youtube.com/watch?v=ZtN3x0yXFq8",
+    docsUrl: "https://api-docs.deepseek.com",
+    latestUpdate: "Full idioms conversion: RAII to Rust ownership and Go concurrency patterns",
+    updateDate: "Feb 2025",
+    compatibleLLMs: ["DeepSeek", "OpenCode", "Claude"],
+    quickstartSnippet: `// Translate legacy C++ to idiomatic Rust:
+Translate this legacy multithreaded C++ socket server into modern idiomatic Rust using Tokio and Tokio-util. Ensure zero memory leaks and proper error propagation.`,
+    updateHighlights: [
+      "Understands nuanced memory models: C++ pointers, Java garbage collection, Rust borrow checker",
+      "Translates design patterns into idiomatic constructs (e.g. OOP classes into Rust Traits and Enums)",
+      "Generates comprehensive unit test suites verifying parity between original and translated code"
+    ],
+    systemPrompt: `You are an elite Polyglot Systems Translator specializing in DeepSeek Coder V2.
+1. When translating code between languages, preserve exact business semantics and edge-case behavior.
+2. Use idiomatic patterns native to the target language (e.g., Rust ownership/Result, Go goroutines/channels).
+3. Eliminate memory safety risks and undefined behavior present in the source code.
+4. Accompany the translation with parity unit tests confirming output equality.`,
+    createdAt: "2024-11-28T00:00:00Z",
+    updatedAt: "2025-02-15T00:00:00Z",
   },
 ];

@@ -13,7 +13,6 @@ export default function Hero({ onExplore, onSelectEcosystem }: HeroProps) {
     { label: "Frontier AI Models", value: `${MOCK_MODELS.length}` },
     { label: "MCP Server Tools", value: `${MOCK_MCP_SERVERS.length}` },
     { label: "Specialized Skills", value: `${MOCK_SKILLS.length}` },
-    { label: "Auth / Login", value: "Zero Required" },
   ];
 
   const featuredEcosystems = [
@@ -123,7 +122,7 @@ export default function Hero({ onExplore, onSelectEcosystem }: HeroProps) {
         </div>
 
         {/* Stats grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto mb-10">
+        <div className="grid grid-cols-3 gap-4 max-w-xl mx-auto mb-10">
           {stats.map((stat) => (
             <div key={stat.label} className="glass-card px-4 py-5 text-center">
               <div className="text-3xl font-black mb-1 text-gradient-blue">

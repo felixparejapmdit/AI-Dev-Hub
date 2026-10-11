@@ -24,8 +24,13 @@ export default function Navbar({ onRefreshFeed }: NavbarProps) {
 
   return (
     <nav
-      className="glass sticky top-0 z-50 border-b"
-      style={{ borderColor: "var(--color-border)" }}
+      className="sticky top-0 z-50 border-b transition-all"
+      style={{
+        backgroundColor: "rgba(8, 8, 14, 0.96)",
+        borderColor: "rgba(255, 255, 255, 0.08)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+      }}
     >
       <div className="w-full max-w-7xl 2xl:max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
